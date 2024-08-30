@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlsSize.Me - Condom Recommendations</title>
+    <style>
+        body {font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 20px; background-color: #f4f4f4;}
+        .container {max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 5px; box-shadow: 0 0 10px rgba(0,0,0,0.1);}
+        h1, h2 {color: #333;}
+        #recommendations {margin-top: 20px;}
+        .condom-recommendation {background-color: #f0f0f0; border-radius: 5px; padding: 15px; margin-bottom: 10px;}
+        .button {
+            display: inline-block;
+            background-color: #333;
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+            border: none;
+            cursor: pointer;
+        }
+        .button:hover {
+            background-color: #555;
+        }
+        .back-button {
+            display: inline-block;
+            background-color: #333;
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .condom-link {color: #0066cc; text-decoration: none;}
+        .condom-link:hover {text-decoration: underline;}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>PlsSize.Me - Condom Recommendations</h1>
+        <p>Based on your nominal width of <span id="nominal-width"></span> mm, here are some recommended condoms:</p>
+        <div id="recommendations"></div>
+        <a href="index.html" class="button" id="back-button">Back to Calculator</a>
+    </div>
+
+    <script>
+        const condomRecommendations = [
+            { minWidth: 45, maxWidth: 50, brands: [
+                { name: "Caution Wear Iron Grip", link: "https://www.condomdepot.com/caution-wear-iron-grip-snugger-fit-condoms/" },
+                { name: "Glyde Slimfit", link: "https://www.glydeamerica.com/slimfit" },
+                { name: "Kimono MicroThin Ultra Small", link: "https://www.kimono-condoms.com/product/microthin-ultra-small" },
+                { name: "Beyond Seven Sheerlon", link: "https://www.condomdepot.com/beyond-seven-sheerlon-condoms/" }
+            ]},
+            { minWidth: 51, maxWidth: 53, brands: [
+                { name: "Durex Close Fit", link: "https://www.durex.co.uk/products/durex-close-fit-condoms" },
+                { name: "GLYDE Slim Fit", link: "https://www.glydeamerica.com/slimfit" },
+                { name: "Kimono MicroThin", link: "https://www.kimono-condoms.com/product/microthin" },
+                { name: "Okamoto 004", link: "https://www.okamotocondoms.com/products/004-condoms" }
+            ]},
+            { minWidth: 54, maxWidth: 56, brands: [
+                { name: "Durex Enhanced Pleasure", link: "https://www.durex.co.uk/products/durex-pleasure-me-condoms" },
+                { name: "Lifestyles Snugger Fit", link: "https://www.lifestyles.com/condom/snugger-fit/" },
+                { name: "Okamoto 004", link: "https://www.okamotocondoms.com/products/004-condoms" },
+                { name: "ONE Vanish Hyperthin", link: "https://www.onecondoms.com/products/vanish-hyperthin-condoms" }
+            ]},
+            { minWidth: 57, maxWidth: 60, brands: [
+                { name: "Trojan ENZ", link: "https://www.trojanbrands.com/en/products/condoms/trojan-enz-lubricated-condoms" },
+                { name: "Durex Invisible", link: "https://www.durex.co.uk/products/durex-invisible-extra-thin-extra-sensitive-condoms" },
+                { name: "SKYN Original", link: "https://www.skyn.com/en-us/products/skyn-original" },
+                { name: "Lifestyles SKYN Elite", link: "https://www.lifestyles.com/condom/skyn-elite/" }
+            ]},
+            { minWidth: 61, maxWidth: 64, brands: [
+                { name: "Trojan Magnum", link: "https://www.trojanbrands.com/en/products/condoms/magnum-lubricated-condoms" },
+                { name: "Durex XXL", link: "https://www.durex.co.uk/products/durex-xxl-condoms" },
+                { name: "MyOne Perfect Fit (Larger Sizes)", link: "https://www.myonecondoms.com/pages/find-your-fit" },
+                { name: "SKYN Large", link: "https://www.skyn.com/en-us/products/skyn-large" }
+            ]},
+            { minWidth: 65, maxWidth: 69, brands: [
+                { name: "Trojan Magnum XL", link: "https://www.trojanbrands.com/en/products/condoms/magnum-xl-lubricated-condoms" },
+                { name: "MyOne Perfect Fit (Largest Sizes)", link: "https://www.myonecondoms.com/pages/find-your-fit" },
+                { name: "Pasante King Size", link: "https://www.pasante.com/product/pasante-king-size-condoms/" },
+                { name: "TheyFit Larger Sizes", link: "https://www.theyfit.co.uk/pages/how-theyfit-works" }
+            ]},
+            { minWidth: 70, maxWidth: 80, brands: [
+                { name: "MySize Pro 72", link: "https://www.mysize-condoms.com/index/product-information/mysize-pro-72" },
+                { name: "TheyFit Largest Sizes", link: "https://www.theyfit.co.uk/pages/how-theyfit-works" },
+                { name: "Pasante Super King", link: "https://www.pasante.com/product/pasante-super-king-condoms/" },
+                { name: "Unique Plus XXL", link: "https://www.uniquecondom.com/products/plus-xxl" }
+            ]}
+        ];
+
+        function getRecommendations(nominalWidth) {
+            const recommendations = condomRecommendations.find(r => nominalWidth >= r.minWidth && nominalWidth <= r.maxWidth);
+            return recommendations ? recommendations.brands : [{ name: "No specific recommendations. Consider custom-fit condoms.", link: "https://www.myonecondoms.com/pages/find-your-fit" }];
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const nominalWidth = urlParams.get('nominalWidth');
+            
+            if (nominalWidth) {
+                document.getElementById('nominal-width').textContent = nominalWidth;
+                const recommendations = getRecommendations(parseFloat(nominalWidth));
+                const recommendationsDiv = document.getElementById('recommendations');
+                
+                recommendations.forEach(brand => {
+                    const div = document.createElement('div');
+                    div.className = 'condom-recommendation';
+                    div.innerHTML = `<a href="${brand.link}" target="_blank" class="condom-link">${brand.name}</a>`;
+                    recommendationsDiv.appendChild(div);
+                });
+            } else {
+                document.getElementById('recommendations').innerHTML = '<p>Error: No nominal width provided.</p>';
+            }
+
+            // Add event listener to the back button
+            document.getElementById('back-button').addEventListener('click', function(e) {
+                e.preventDefault();
+                window.location.href = 'index.html';
+            });
+        });
+    </script>
+</body>
+</html>
