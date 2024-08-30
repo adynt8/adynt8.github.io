@@ -520,13 +520,13 @@
             const subreddits = ['penis', 'MassiveCock', 'averagepenis', 'hugecockclub', 'cock'];
             console.log('Subreddits to search:', subreddits);
 
-            // Check if we have cached results
+            // Check if we have cached results with the same measurements
             const cachedResults = localStorage.getItem('similarImages');
             if (cachedResults) {
-                const { timestamp, posts } = JSON.parse(cachedResults);
+                const { timestamp, posts, cachedLength, cachedUnit } = JSON.parse(cachedResults);
                 const now = new Date().getTime();
-                // If the cache is less than 1 hour old, use it
-                if (now - timestamp < 3600000) {
+                // If the cache is less than 1 hour old and measurements are the same, use it
+                if (now - timestamp < 3600000 && cachedLength === erectLength && cachedUnit === unit) {
                     console.log('Using cached results');
                     displayResults(posts);
                     return;
@@ -583,10 +583,12 @@
             // Search subreddits and display results
             searchSubreddits().then(similarPosts => {
                 console.log(`Total similar posts found: ${similarPosts.length}`);
-                // Cache the results
+                // Cache the results with current measurements
                 localStorage.setItem('similarImages', JSON.stringify({
                     timestamp: new Date().getTime(),
-                    posts: similarPosts
+                    posts: similarPosts,
+                    cachedLength: erectLength,
+                    cachedUnit: unit
                 }));
                 displayResults(similarPosts);
             })
