@@ -111,7 +111,28 @@
             });
             pornstarComparison.innerHTML = pornstarHTML;
 
-            // 
+                        // Add chart button
+            const chartButton = document.createElement('button');
+            chartButton.textContent = 'View Size Distribution Chart';
+            chartButton.className = 'button';
+            chartButton.onclick = viewSizeChart;
+            result.appendChild(chartButton);
+            // Add calculations button
+            const calculationsButton = document.createElement('button');
+            calculationsButton.textContent = 'View Calculations';
+            calculationsButton.className = 'button';
+            calculationsButton.onclick = viewCalculations;
+            result.appendChild(calculationsButton);
+        }
+        function viewSizeChart() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const encodedParams = urlParams.get('d');
+            window.location.href = `size-chart.html?d=${encodedParams}`;
+        }
+        function viewCalculations() {
+            window.location.href = 'calculations.html';
+        }
+
 
         document.addEventListener('DOMContentLoaded', function() {
             displaySharedResults();
