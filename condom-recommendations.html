@@ -15,63 +15,64 @@
         <button onclick="window.location.href='index.html'" class="button" id="back-button">Back to Calculator</button>
     </div>
 
+
     <script>
         const condomRecommendations = [
             { minWidth: 45, maxWidth: 50, brands: [
-                { name: "Caution Wear Iron Grip", link: "https://www.condomdepot.com/caution-wear-iron-grip-snugger-fit-condoms/" },
-                { name: "Glyde Slimfit", link: "https://www.glydeamerica.com/slimfit" },
-                { name: "Kimono MicroThin Ultra Small", link: "https://www.kimono-condoms.com/product/microthin-ultra-small" },
-                { name: "Beyond Seven Sheerlon", link: "https://www.condomdepot.com/beyond-seven-sheerlon-condoms/" },
-                { name: "Trojan ENZ Small", link: "https://www.trojanbrands.com/en/products/condoms/trojan-enz-lubricated-condoms" },
-                { name: "ONE The Legend", link: "https://www.onecondoms.com/products/the-legend-condoms" }
+                { name: "Caution Wear Iron Grip" },
+                { name: "Glyde Slimfit" },
+                { name: "Kimono MicroThin Ultra Small" },
+                { name: "Beyond Seven Sheerlon" },
+                { name: "Trojan ENZ Small" },
+                { name: "ONE The Legend" }
             ]},
             { minWidth: 51, maxWidth: 53, brands: [
-                { name: "Durex Close Fit", link: "https://www.durex.co.uk/products/durex-close-fit-condoms" },
-                { name: "GLYDE Slim Fit", link: "https://www.glydeamerica.com/slimfit" },
-                { name: "Kimono MicroThin", link: "https://www.kimono-condoms.com/product/microthin" },
-                { name: "Okamoto 004", link: "https://www.okamotocondoms.com/products/004-condoms" },
-                { name: "Crown Skinless Skin", link: "https://www.condomdepot.com/crown-skinless-skin-condoms/" },
-                { name: "Beyond Seven Studded", link: "https://www.condomdepot.com/beyond-seven-studded-condoms/" }
+                { name: "Durex Close Fit" },
+                { name: "GLYDE Slim Fit" },
+                { name: "Kimono MicroThin" },
+                { name: "Okamoto 004" },
+                { name: "Crown Skinless Skin" },
+                { name: "Beyond Seven Studded" }
             ]},
             { minWidth: 54, maxWidth: 56, brands: [
-                { name: "Durex Enhanced Pleasure", link: "https://www.durex.co.uk/products/durex-pleasure-me-condoms" },
-                { name: "Lifestyles Snugger Fit", link: "https://www.lifestyles.com/condom/snugger-fit/" },
-                { name: "Okamoto 004", link: "https://www.okamotocondoms.com/products/004-condoms" },
-                { name: "ONE Vanish Hyperthin", link: "https://www.onecondoms.com/products/vanish-hyperthin-condoms" },
-                { name: "Trojan Bareskin", link: "https://www.trojanbrands.com/en/products/condoms/trojan-bareskin-lubricated-condoms" },
-                { name: "SKYN Original", link: "https://www.skyn.com/en-us/products/skyn-original" }
+                { name: "Durex Enhanced Pleasure" },
+                { name: "Lifestyles Snugger Fit" },
+                { name: "Okamoto 004" },
+                { name: "ONE Vanish Hyperthin" },
+                { name: "Trojan Bareskin" },
+                { name: "SKYN Original" }
             ]},
             { minWidth: 57, maxWidth: 60, brands: [
-                { name: "Trojan ENZ", link: "https://www.trojanbrands.com/en/products/condoms/trojan-enz-lubricated-condoms" },
-                { name: "Durex Invisible", link: "https://www.durex.co.uk/products/durex-invisible-extra-thin-extra-sensitive-condoms" },
-                { name: "SKYN Original", link: "https://www.skyn.com/en-us/products/skyn-original" },
-                { name: "Lifestyles SKYN Elite", link: "https://www.lifestyles.com/condom/skyn-elite/" },
-                { name: "ONE Pleasure Plus", link: "https://www.onecondoms.com/products/pleasure-plus-condoms" },
-                { name: "Kimono MicroThin Large", link: "https://www.kimono-condoms.com/product/microthin-large" }
+                { name: "Trojan ENZ" },
+                { name: "Durex Invisible" },
+                { name: "SKYN Original" },
+                { name: "Lifestyles SKYN Elite" },
+                { name: "ONE Pleasure Plus" },
+                { name: "Kimono MicroThin Large" }
             ]},
             { minWidth: 61, maxWidth: 64, brands: [
-                { name: "Trojan Magnum", link: "https://www.trojanbrands.com/en/products/condoms/magnum-lubricated-condoms" },
-                { name: "Durex XXL", link: "https://www.durex.co.uk/products/durex-xxl-condoms" },
-                { name: "MyOne Perfect Fit (Larger Sizes)", link: "https://www.myonecondoms.com/pages/find-your-fit" },
-                { name: "SKYN Large", link: "https://www.skyn.com/en-us/products/skyn-large" },
-                { name: "ONE The Legend XL", link: "https://www.onecondoms.com/products/the-legend-xl-condoms" },
-                { name: "Lifestyles KYNG", link: "https://www.lifestyles.com/condom/kyng/" }
+                { name: "Trojan Magnum" },
+                { name: "Durex XXL" },
+                { name: "MyOne Perfect Fit (Larger Sizes)" },
+                { name: "SKYN Large" },
+                { name: "ONE The Legend XL" },
+                { name: "Lifestyles KYNG" }
             ]},
             { minWidth: 65, maxWidth: 69, brands: [
-                { name: "Trojan Magnum XL", link: "https://www.trojanbrands.com/en/products/condoms/magnum-xl-lubricated-condoms" },
-                { name: "MyOne Perfect Fit (Largest Sizes)", link: "https://www.myonecondoms.com/pages/find-your-fit" },
-                { name: "Pasante King Size", link: "https://www.pasante.com/product/pasante-king-size-condoms/" },
-                { name: "TheyFit Larger Sizes", link: "https://www.theyfit.co.uk/pages/how-theyfit-works" },
-                { name: "ONE The Legend XXL", link: "https://www.onecondoms.com/products/the-legend-xxl-condoms" },
-                { name: "Durex XXL", link: "https://www.durex.co.uk/products/durex-xxl-condoms" }
+                { name: "Trojan Magnum XL" },
+                { name: "MyOne Perfect Fit (Largest Sizes)" },
+                { name: "Pasante King Size" },
+                { name: "TheyFit Larger Sizes" },
+                { name: "ONE The Legend XXL" },
+                { name: "Durex XXL" }
             ]},
             { minWidth: 70, maxWidth: 80, brands: [
-                { name: "MySize Pro 72", link: "https://www.mysize-condoms.com/index/product-information/mysize-pro-72" },
-                { name: "TheyFit Largest Sizes", link: "https://www.theyfit.co.uk/pages/how-theyfit-works" },
-                { name: "Pasante Super King", link: "https://www.pasante.com/product/pasante-super-king-condoms/" },
-                { name: "Unique Plus XXL", link: "https://www.uniquecondom.com/products/plus-xxl" },
-                { name: "FC2 Female Condom", link: "https://fc2femalecondom.com/" },
-                { name: "Trojan Magnum XXL", link: "https://www.trojanbrands.com/en/products/condoms/magnum-xxl-lubricated-condoms" }
+                { name: "MySize Pro 72" },
+                { name: "TheyFit Largest Sizes" },
+                { name: "Pasante Super King" },
+                { name: "Unique Plus XXL" },
+                { name: "FC2 Female Condom" },
+                { name: "Trojan Magnum XXL" }
             ]}
         ];
 
