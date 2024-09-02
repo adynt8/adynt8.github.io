@@ -43,6 +43,14 @@
             <div id="advanced-result"></div>
             <div id="size-comparison"></div>
             <div id="pornstar-comparison"></div>
+            
+            <!-- Visualization section -->
+            <div id="visualization">
+                <h3>Size Visualization</h3>
+                <canvas id="sizeChart" width="400" height="200"></canvas>
+            </div>
+
+            <!-- Remove the progress tracker section -->
         </div>
 
         <h2>General Statistics</h2>
@@ -53,6 +61,7 @@
         <button onclick="window.location.href='accuracy.html'" class="button">Accuracy Information</button>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="scripts/localStorage.js"></script>
     <script src="scripts/loadingOverlay.js"></script>
     <script src="scripts/populationStats.js"></script>
@@ -65,6 +74,7 @@
     <script src="scripts/fetchSimilarImages.js"></script>
     <script src="scripts/shareResults.js"></script>
     <script src="scripts/utils.js"></script>
+    <script src="scripts/visualization.js"></script>
     <script src="scripts/main.js"></script>
 </body>
 </html>
