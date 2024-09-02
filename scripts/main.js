@@ -162,6 +162,48 @@ async function getUserCountry() {
     }
 }
 
+function updateStats() {
+    const population = document.getElementById('population-selector').value;
+    const unit = document.getElementById('unit-selector').value;
+    const generalStats = document.getElementById('general-stats');
+    
+    let statsHTML = '';
+    
+    if (population === 'plssize-me') {
+        // Handle PlsSize.Me dataset
+        const plsSizeMeStats = getPlsSizeMeStats(unit);
+        if (plsSizeMeStats) {
+            statsHTML += `<li>Average Erect Length: ${plsSizeMeStats.erectLength.toFixed(2)} ${unit}</li>`;
+            statsHTML += `<li>Average Erect Girth: ${plsSizeMeStats.erectGirth.toFixed(2)} ${unit}</li>`;
+            statsHTML += `<li>Average Flaccid Length: ${plsSizeMeStats.flaccidLength.toFixed(2)} ${unit}</li>`;
+            statsHTML += `<li>Average Flaccid Girth: ${plsSizeMeStats.flaccidGirth.toFixed(2)} ${unit}</li>`;
+        } else {
+            statsHTML += '<li>PlsSize.Me dataset is currently unavailable.</li>';
+        }
+    } else {
+        // Handle other populations
+        for (let [key, value] of Object.entries(stats[unit])) {
+            if (population in value) {
+                statsHTML += `<li>Average ${capitalizeFirstLetter(key.replace(/([A-Z])/g, ' $1').toLowerCase())}: ${value[population].avg.toFixed(2)} ${unit}</li>`;
+            }
+        }
+    }
+    
+    generalStats.innerHTML = statsHTML;
+}
+
+function getPlsSizeMeStats(unit) {
+    // This function should retrieve the PlsSize.Me dataset
+    // You'll need to implement this based on how you're storing/retrieving the data
+    // For now, let's return a placeholder object
+    return {
+        erectLength: 14.5,
+        erectGirth: 12.5,
+        flaccidLength: 9.5,
+        flaccidGirth: 9.0
+    };
+}
+
 document.addEventListener('DOMContentLoaded', async function() {
     updateLabels();
     updateStats();

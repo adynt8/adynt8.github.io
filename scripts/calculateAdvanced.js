@@ -208,5 +208,22 @@ function calculateAdvanced() {
         } else {
             processData({ visitorId: visitorId, timestamp: new Date().toISOString() });
         }
+
+        // After calculating results and updating the DOM
+        const userMeasurements = {
+            erectLength: parseFloat(document.getElementById('erect-length').value) || 0,
+            erectGirth: parseFloat(document.getElementById('erect-girth').value) || 0,
+            flaccidLength: parseFloat(document.getElementById('flaccid-length').value) || 0,
+            flaccidGirth: parseFloat(document.getElementById('flaccid-girth').value) || 0
+        };
+
+        const populationAverage = {
+            erectLength: stats[unit].erectLength.avg,
+            erectGirth: stats[unit].erectGirth.avg,
+            flaccidLength: stats[unit].flaccidLength.avg,
+            flaccidGirth: stats[unit].flaccidGirth.avg
+        };
+
+        updateVisualization(userMeasurements, populationAverage, unit);
     }, 1000); // Simulated 1-second delay
 }
