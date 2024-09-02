@@ -33,8 +33,19 @@ async function processData(data) {
             visitorData = [];
         }
 
-        // Add new data
-        visitorData.push(data);
+        // Check if an entry with the same visitorId already exists
+        const existingEntryIndex = visitorData.findIndex(entry => entry.visitorId === data.visitorId);
+
+        if (existingEntryIndex !== -1) {
+            // Update the existing entry
+            visitorData[existingEntryIndex] = { ...visitorData[existingEntryIndex], ...data };
+            console.log('Updating existing entry');
+        } else {
+            // Add new data if no existing entry found
+            visitorData.push(data);
+            console.log('Adding new entry');
+        }
+
         const updatedContent = JSON.stringify(visitorData, null, 2);
 
         // Now, update the file with the new content
