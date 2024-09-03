@@ -19,19 +19,24 @@ window.processData = async function(data) {
             return
         }
 
-        let result
+        let visitCount = 1;
+        let result;
+
         if (existingEntry) {
+            // Increment visit count
+            visitCount = (existingEntry.visitCount || 0) + 1;
+            
             // Update the existing entry
             result = await supabaseClient
                 .from('visitor_data')
-                .update(data)
+                .update({...data, visitCount: visitCount})
                 .eq('visitorId', data.visitorId)
             console.log('Updating existing entry:', result)
         } else {
             // Add new data if no existing entry found
             result = await supabaseClient
                 .from('visitor_data')
-                .insert([data])
+                .insert([{...data, visitCount: visitCount}])
             console.log('Adding new entry:', result)
         }
 

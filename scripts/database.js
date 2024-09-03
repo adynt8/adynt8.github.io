@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', async function() {
     const supabaseUrl = 'https://lcayhsjrmjkwxekutiih.supabase.co';
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxjYXloc2pybWprd3hla3V0aWloIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjUzMjQzNjMsImV4cCI6MjA0MDkwMDM2M30.HO8ykfrFvwxjhFt5XuDJ1aMvbbIRpnvYO4n18NqXqLc';
@@ -44,8 +43,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             let count = 0;
 
             sortedData.forEach((entry, index) => {
-                if (entry.erectLength !== undefined && entry.erectGirth !== undefined &&
-                    entry.flaccidLength !== undefined && entry.flaccidGirth !== undefined) {
+                if (entry.erectLength && entry.erectGirth && entry.flaccidLength && entry.flaccidGirth) {
                     const row = tableBody.insertRow();
                     row.insertCell(0).innerText = index + 1;
                     row.insertCell(1).innerText = entry.visitorId;
@@ -96,3 +94,5 @@ document.addEventListener('DOMContentLoaded', async function() {
         console.error('Error fetching data:', error);
     }
 });
+
+// Remove or comment out the populateTable function as it's no longer needed

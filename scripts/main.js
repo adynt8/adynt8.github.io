@@ -48,115 +48,117 @@ function showFirstVisitPopup() {
     if (!localStorage.getItem('firstVisitPopupShown')) {
         const popup = document.createElement('div');
         popup.className = 'popup';
+        popup.style.display = 'block';
         popup.innerHTML = `
             <div class="popup-content">
-                <h2>Welcome to PlsSize.Me!</h2>
-                <p>We use anonymized measurements to create a public dataset for more accurate statistics. No personally identifiable information is collected.</p>
-                <p><strong>By contributing your anonymous measurements, you will help improve the accuracy of our dataset and benefit the community.</strong></p>
-                <p>Would you like to contribute your anonymous measurements to our public dataset, which may be used for research and analysis?</p>
-                <p>If you click "No", the sharing feature will be disabled.</p>
-                <button id="acceptButton" class="button button-yes">Yes, Help Improve Accuracy</button>
-                <button id="declineButton" class="button button-no">No, Maybe Later</button>
+                <h2>Share Your Anonymous Measurements?</h2>
+                <p>Your data can help improve our understanding of penis size diversity.</p>
+                <ul>
+                    <li>Support research on size variations across populations</li>
+                    <li>Help others feel more confident about their bodies</li>
+                </ul>
+                <p>100% anonymous. Your privacy is our top priority.</p>
+                <button id="shareButton" class="button button-share">Yes, Count Me In!</button>
+                <button id="optOutButton" class="button button-opt-out">Maybe Later</button>
+                <p class="small-text">You can change your mind anytime in settings.</p>
             </div>
         `;
         document.body.appendChild(popup);
 
-        document.getElementById('acceptButton').addEventListener('click', function() {
-            popup.classList.add('fade-out');
-            setTimeout(() => {
-                popup.remove();
-            }, 500);
-            localStorage.setItem('firstVisitPopupShown', 'true');
-            localStorage.setItem('shareMeasurements', 'true');
+        document.getElementById('shareButton').addEventListener('click', function() {
+            handleSharingChoice(true);
         });
 
-        document.getElementById('declineButton').addEventListener('click', function() {
-            popup.classList.add('fade-out');
-            setTimeout(() => {
-                popup.remove();
-            }, 500);
-            localStorage.setItem('firstVisitPopupShown', 'true');
-            localStorage.setItem('shareMeasurements', 'false');
+        document.getElementById('optOutButton').addEventListener('click', function() {
+            handleSharingChoice(false);
         });
 
-        // Add styles for the popup
+        // Add styles for the new popup
         const style = document.createElement('style');
-        style.textContent = `
+        style.textContent += `
             .popup {
+                display: none;
                 position: fixed;
-                top: 0;
+                z-index: 1000;
                 left: 0;
+                top: 0;
                 width: 100%;
                 height: 100%;
-                background-color: rgba(0, 0, 0, 0.5);
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                z-index: 1000;
-                opacity: 0;
-                animation: fadeIn 0.5s ease-out forwards;
+                background-color: rgba(0,0,0,0.5);
             }
             .popup-content {
-                background-color: #fff;
+                background-color: #ffffff;
+                margin: 10% auto;
                 padding: 30px;
-                border-radius: 8px;
-                max-width: 80%;
+                border-radius: 10px;
+                width: 90%;
+                max-width: 500px;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
                 text-align: center;
-                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-                transform: scale(0.9);
-                animation: scaleIn 0.3s ease-out 0.2s forwards;
             }
             .popup-content h2 {
                 color: #2c3e50;
                 margin-bottom: 20px;
+                font-size: 24px;
             }
             .popup-content p {
+                color: #34495e;
                 margin-bottom: 15px;
-                color: #333;
-            }
-            .button {
-                margin-top: 20px;
-                padding: 12px 24px;
-                border: none;
-                border-radius: 4px;
-                cursor: pointer;
-                transition: background-color 0.3s;
                 font-size: 16px;
-                margin-right: 10px;
             }
-            .button-yes {
-                background-color: #28a745;
-                color: #fff;
+            .popup-content ul {
+                text-align: left;
+                margin-bottom: 20px;
+                color: #34495e;
+                font-size: 16px;
+            }
+            .button-share {
+                background-color: #27ae60;
+                color: #ffffff;
+                padding: 15px 30px;
                 font-size: 18px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: all 0.3s;
+                margin-bottom: 15px;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             }
-            .button-yes:hover {
-                background-color: #218838;
+            .button-share:hover {
+                background-color: #2ecc71;
+                transform: translateY(-2px);
+                box-shadow: 0 6px 8px rgba(0,0,0,0.15);
             }
-            .button-no {
-                background-color: #dc3545;
-                color: #fff;
+            .button-opt-out {
+                background-color: transparent;
+                color: #95a5a6;
+                padding: 10px 20px;
+                font-size: 16px;
+                border: none;
+                cursor: pointer;
+                transition: color 0.3s;
             }
-            .button-no:hover {
-                background-color: #c82333;
+            .button-opt-out:hover {
+                color: #7f8c8d;
             }
-            @keyframes fadeIn {
-                from { opacity: 0; }
-                to { opacity: 1; }
-            }
-            @keyframes scaleIn {
-                from { transform: scale(0.9); }
-                to { transform: scale(1); }
-            }
-            .fade-out {
-                animation: fadeOut 0.5s ease-out forwards;
-            }
-            @keyframes fadeOut {
-                from { opacity: 1; }
-                to { opacity: 0; }
+            .small-text {
+                font-size: 14px;
+                color: #7f8c8d;
+                margin-top: 20px;
             }
         `;
         document.head.appendChild(style);
     }
+}
+
+function handleSharingChoice(share) {
+    localStorage.setItem('firstVisitPopupShown', 'true');
+    localStorage.setItem('shareMeasurements', share.toString());
+    const popup = document.querySelector('.popup');
+    popup.classList.add('fade-out');
+    setTimeout(() => {
+        popup.remove();
+    }, 500);
 }
 
 async function getUserCountry() {
@@ -249,7 +251,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     updateLabels();
     await window.updateStats(); // Use the global updateStats function
     loadStoredValues();
-    showFirstVisitPopup(); // Add this line to show the popup on first visit
+    showFirstVisitPopup(); // Make sure this line is here
 
     // Fetch and store the user's country
     const country = await getUserCountry();
