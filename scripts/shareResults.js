@@ -1,13 +1,25 @@
 function shareResults() {
+    // Check if the user has agreed to share measurements
+    const shareMeasurements = localStorage.getItem('shareMeasurements');
+    if (shareMeasurements !== 'true') {
+        alert('Sharing is disabled because you did not agree to share your measurements.');
+        return;
+    }
+
     const unit = document.getElementById('unit-selector').value;
     const erectLength = document.getElementById('erect-length').value;
     const flaccidLength = document.getElementById('flaccid-length').value;
     const erectGirth = document.getElementById('erect-girth').value;
     const flaccidGirth = document.getElementById('flaccid-girth').value;
+    const visitorId = generateVisitorId(); // Get the visitor ID
 
-    const encodedParams = btoa(`${unit},${erectLength},${flaccidLength},${erectGirth},${flaccidGirth}`);
+    console.log('Generated visitor ID:', visitorId);
+
+    const encodedParams = btoa(`${visitorId}`);
     const shareUrl = `${window.location.origin}/shared-results.html?d=${encodedParams}`;
     
+    console.log('Share URL:', shareUrl);
+
     const modal = createModal('Share Your Results');
     const shareOptions = [
         { name: 'Copy Link', icon: '🔗', action: () => navigator.clipboard.writeText(shareUrl) },
@@ -19,6 +31,7 @@ function shareResults() {
     addCloseButton(modal);
     document.body.appendChild(modal);
     animateModal(modal);
+    console.log('Share modal displayed');
 }
 
 function createModal(title) {

@@ -56,7 +56,8 @@ function calculateAdvanced() {
         let resultHTML = '';
         for (let [key, value] of Object.entries(measurements)) {
             if (!isNaN(value)) {
-                const { avg, stdDev } = stats[unit][key];
+                // Use the latest stats from window.stats
+                const { avg, stdDev } = window.stats[unit][key];
                 const percentile = calculatePercentile(value, avg, stdDev);
                 const difference = value - avg;
                 console.log(`Calculating ${key}:`);
@@ -195,18 +196,22 @@ function calculateAdvanced() {
         const dataToSave = {
             visitorId: visitorId,
             unit: unit,
-            erectLength: erectLength,
-            flaccidLength: flaccidLength,
-            erectGirth: erectGirth,
-            flaccidGirth: flaccidGirth,
+            erectLength: erectLength || null,
+            flaccidLength: flaccidLength || null,
+            erectGirth: erectGirth || null,
+            flaccidGirth: flaccidGirth || null,
             country: country,
             timestamp: new Date().toISOString()
         };
 
+        console.log('Preparing to save data:', dataToSave);
+
         if (shareMeasurements) {
-            processData(dataToSave);
+            console.log('Sharing measurements');
+            window.processData(dataToSave);
         } else {
-            processData({ visitorId: visitorId, timestamp: new Date().toISOString() });
+            console.log('Not sharing measurements, only saving visitor ID');
+            window.processData({ visitorId: visitorId, timestamp: new Date().toISOString() });
         }
 
         // After calculating results and updating the DOM
@@ -218,12 +223,16 @@ function calculateAdvanced() {
         };
 
         const populationAverage = {
-            erectLength: stats[unit].erectLength.avg,
-            erectGirth: stats[unit].erectGirth.avg,
-            flaccidLength: stats[unit].flaccidLength.avg,
-            flaccidGirth: stats[unit].flaccidGirth.avg
+            erectLength: window.stats[unit].erectLength.avg,
+            erectGirth: window.stats[unit].erectGirth.avg,
+            flaccidLength: window.stats[unit].flaccidLength.avg,
+            flaccidGirth: window.stats[unit].flaccidGirth.avg
         };
 
         updateVisualization(userMeasurements, populationAverage, unit);
+
     }, 1000); // Simulated 1-second delay
 }
+
+// Make this function available globally
+window.calculateAdvanced = calculateAdvanced;

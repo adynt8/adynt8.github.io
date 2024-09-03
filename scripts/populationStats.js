@@ -27,96 +27,62 @@ const populationStats = {
 
 let stats = populationStats.global;
 
-function updateStats() {
+async function updateStats() {
     const population = document.getElementById('population-selector').value;
 
     console.log(`Updating stats for population: ${population}`);
 
-    switch (population) {
-        case 'global':
-            stats = populationStats.global;
-            console.log('Using global population stats');
-            break;
-        case 'western':
-            stats = populationStats.western;
-            console.log('Using western population stats');
-            break;
-        case 'asian':
-            stats = populationStats.asian;
-            console.log('Using Asian population stats');
-            break;
-        case 'african':
-            stats = populationStats.african;
-            console.log('Using African population stats');
-            break;
-        case 'european':
-            stats = populationStats.european;
-            console.log('Using European population stats');
-            break;
-        case 'latin-american':
-            stats = populationStats.latinAmerican;
-            console.log('Using Latin American population stats');
-            break;
-        case 'plssize-me':
-            console.log('Fetching PlsSize.Me stats...');
-            getPlsSizeMeStats().then(fetchedStats => {
-                stats = fetchedStats;
-                console.log('PlsSize.Me stats fetched:', stats);
-                console.log('Number of data points:', stats.dataPoints);
-                console.log('Last updated:', stats.lastUpdated);
-                updateGeneralStats();
-            });
-            return; // Exit the function early to wait for async fetch
-        default:
-            stats = populationStats.global;
-            console.log('Using default global population stats');
+    if (population === 'plssize-me') {
+        console.log('Fetching PlsSize.Me stats...');
+        try {
+            stats = await getPlsSizeMeStats();
+            console.log('PlsSize.Me stats fetched:', stats);
+        } catch (error) {
+            console.error('Error fetching PlsSize.Me stats:', error);
+            stats = getDefaultStats();
+        }
+    } else {
+        stats = populationStats[population] || populationStats.global;
     }
 
     console.log('Current stats:', stats);
     updateGeneralStats();
+    
+    // Trigger recalculation after updating stats
+    if (typeof window.calculateAdvanced === 'function') {
+        window.calculateAdvanced();
+    }
+    
+    return stats;
 }
 
 async function getPlsSizeMeStats() {
-    const url = 'https://api.github.com/repos/APSCPLM/User-Data/contents/visitor_data.json';
-    const TOKEN = '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';
-
     try {
-        console.log('Fetching PlsSize.Me data from GitHub...');
-        const response = await fetch(url, {
-            headers: {
-                'Accept': 'application/vnd.github.v3.raw',
-                'Authorization': `token ${TOKEN}`
-            }
-        });
+        console.log('Fetching PlsSize.Me data from Supabase...');
+        const { data, error } = await supabase
+            .from('measurements')
+            .select('erect_length, erect_girth, flaccid_length, flaccid_girth');
 
-        if (response.status === 404) {
-            console.log('Visitor data file not found. Using default values.');
+        if (error) {
+            throw error;
+        }
+
+        if (!data || data.length === 0) {
+            console.log('No data available. Using default values.');
             return getDefaultStats();
         }
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const visitorData = await response.json();
-        console.log('Visitor data fetched successfully');
-
-        if (!visitorData.visitors || Object.keys(visitorData.visitors).length === 0) {
-            console.log('No visitor data available. Using default values.');
-            return getDefaultStats();
-        }
-
-        console.log(`Number of data points: ${Object.keys(visitorData.visitors).length}`);
+        console.log(`Number of data points: ${data.length}`);
 
         // Calculate averages and standard deviations
         const stats = {
             cm: {
-                erectLength: calculateStats(Object.values(visitorData.visitors).map(data => parseFloat(data.erectLength))),
-                erectGirth: calculateStats(Object.values(visitorData.visitors).map(data => parseFloat(data.erectGirth))),
-                flaccidLength: calculateStats(Object.values(visitorData.visitors).map(data => parseFloat(data.flaccidLength))),
-                flaccidGirth: calculateStats(Object.values(visitorData.visitors).map(data => parseFloat(data.flaccidGirth)))
+                erectLength: calculateStats(data.map(d => d.erect_length)),
+                erectGirth: calculateStats(data.map(d => d.erect_girth)),
+                flaccidLength: calculateStats(data.map(d => d.flaccid_length)),
+                flaccidGirth: calculateStats(data.map(d => d.flaccid_girth))
             },
-            dataPoints: Object.keys(visitorData.visitors).length,
+            dataPoints: data.length,
             lastUpdated: new Date().toISOString()
         };
 
@@ -131,7 +97,7 @@ async function getPlsSizeMeStats() {
         console.log('PlsSize.Me stats calculated:', stats);
         return stats;
     } catch (error) {
-        console.error('Error fetching visitor data:', error);
+        console.error('Error fetching data from Supabase:', error);
         return getDefaultStats();
     }
 }
@@ -182,4 +148,23 @@ function updateGeneralStats() {
         li.textContent = `Average ${key.replace(/([A-Z])/g, ' $1').toLowerCase()}: ${value.avg.toFixed(2)} ${unit} (±${value.stdDev.toFixed(2)} ${unit})`;
         statsList.appendChild(li);
     }
+    if (stats.dataPoints) {
+        const li = document.createElement('li');
+        li.textContent = `Number of data points: ${stats.dataPoints}`;
+        statsList.appendChild(li);
+    }
+    if (stats.lastUpdated) {
+        const li = document.createElement('li');
+        li.textContent = `Last updated: ${new Date(stats.lastUpdated).toLocaleString()}`;
+        statsList.appendChild(li);
+    }
 }
+
+// Make stats and updateStats globally accessible
+window.stats = stats;
+window.updateStats = async function() {
+    await updateStats();
+};
+
+// Export these functions so they can be used globally
+export { updateLabels, updateGeneralStats, updateStats, getPlsSizeMeStats, stats };

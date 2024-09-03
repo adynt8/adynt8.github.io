@@ -1,3 +1,14 @@
+import { updateLabels, updateGeneralStats, stats } from './populationStats.js';
+
+// Make stats globally accessible (if not already done in populationStats.js)
+window.stats = stats;
+
+// Make these functions available globally
+window.viewSizeChart = viewSizeChart;
+window.viewCalculations = viewCalculations;
+window.checkForHorse = checkForHorse;
+window.loadStoredValues = loadStoredValues;
+
 function loadStoredValues() {
     const unit = localStorage.getItem('penisCalcUnit');
     if (unit) {
@@ -43,6 +54,7 @@ function showFirstVisitPopup() {
                 <p>We use anonymized measurements to create a public dataset for more accurate statistics. No personally identifiable information is collected.</p>
                 <p><strong>By contributing your anonymous measurements, you will help improve the accuracy of our dataset and benefit the community.</strong></p>
                 <p>Would you like to contribute your anonymous measurements to our public dataset, which may be used for research and analysis?</p>
+                <p>If you click "No", the sharing feature will be disabled.</p>
                 <button id="acceptButton" class="button button-yes">Yes, Help Improve Accuracy</button>
                 <button id="declineButton" class="button button-no">No, Maybe Later</button>
             </div>
@@ -193,9 +205,6 @@ function updateStats() {
 }
 
 function getPlsSizeMeStats(unit) {
-    // This function should retrieve the PlsSize.Me dataset
-    // You'll need to implement this based on how you're storing/retrieving the data
-    // For now, let's return a placeholder object
     return {
         erectLength: 14.5,
         erectGirth: 12.5,
@@ -204,13 +213,79 @@ function getPlsSizeMeStats(unit) {
     };
 }
 
+function checkForHorse() {
+    const erectLength = parseFloat(document.getElementById('erect-length').value);
+    const unit = document.getElementById('unit-selector').value;
+    
+    // Convert to cm if in inches
+    const lengthInCm = unit === 'in' ? erectLength * 2.54 : erectLength;
+
+    if (lengthInCm >= 22) {
+        const horse = document.createElement('img');
+        horse.src = 'horse.png';
+        horse.style.position = 'fixed';
+        horse.style.top = '50%';
+        horse.style.left = '-100px';
+        horse.style.transform = 'translateY(-50%)';
+        horse.style.width = '100px';
+        horse.style.zIndex = '9999';
+        document.body.appendChild(horse);
+
+        let position = -100;
+        const animate = () => {
+            position += 5;
+            horse.style.left = `${position}px`;
+            if (position < window.innerWidth + 100) {
+                requestAnimationFrame(animate);
+            } else {
+                document.body.removeChild(horse);
+            }
+        };
+        animate();
+    }
+}
+
 document.addEventListener('DOMContentLoaded', async function() {
     updateLabels();
-    updateStats();
+    await window.updateStats(); // Use the global updateStats function
     loadStoredValues();
     showFirstVisitPopup(); // Add this line to show the popup on first visit
 
     // Fetch and store the user's country
     const country = await getUserCountry();
     localStorage.setItem('userCountry', country);
+
+    // Add event listener for erect length input
+    document.getElementById('erect-length').addEventListener('input', checkForHorse);
+
+    // Add event listeners for population and unit selectors
+    document.getElementById('population-selector').addEventListener('change', async () => {
+        await window.updateStats();
+        window.calculateAdvanced(); // Call calculateAdvanced after updating stats
+    });
+    document.getElementById('unit-selector').addEventListener('change', async () => {
+        updateGeneralStats();
+        window.calculateAdvanced(); // Call calculateAdvanced after changing units
+    });
+});
+
+// Add this function at the end of the file
+function printJokeToConsole() {
+    const jokes = [
+        "Why did the ruler feel inadequate? It was never quite up to the measure!",
+        "What do you call a mathematician who's always talking about penis size? An algeBRO!",
+        "Why was the statistician embarrassed? His sample size was too small!",
+        "What did one tape measure say to the other? 'Don't worry, size isn't everything!'",
+        "Why did the penis go to therapy? It had too many hang-ups!"
+    ];
+    const randomJoke = jokes[Math.floor(Math.random() * jokes.length)];
+    console.log(randomJoke);
+}
+
+// Call this function after all other initializations
+window.addEventListener('load', () => {
+    // ... any existing load event listeners ...
+    
+    // Add this line at the end
+    setTimeout(printJokeToConsole, 1000); // Print joke after a 1-second delay
 });
