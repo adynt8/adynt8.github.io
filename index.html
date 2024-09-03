@@ -4,73 +4,79 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PlsSize.Me - Advanced Penis Size Calculator</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.21.0"></script>
     <script src="scripts/processData.js"></script>
+    <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-    <div id="loadingOverlay" class="loading-overlay" style="display: none;">
-        <div class="loading-spinner"></div>
+<body class="bg-gray-100 text-gray-900">
+    <div id="loadingOverlay" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center" style="display: none;">
+        <div class="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-32 w-32"></div>
     </div>
-    
-    
 
-    <div class="container fade-in">
-        <h1>PlsSize.Me - Advanced Penis Size Calculator</h1>
-        <p>This tool provides detailed information about penis size statistics and allows you to compare your measurements to the average and to famous adult film actors.</p>
+    <div class="container mx-auto p-4">
+        <h1 class="text-5xl font-bold text-center mb-6 text-blue-600">PlsSize.Me</h1>
+        <p class="text-center mb-8 text-lg text-gray-700">Advanced Penis Size Calculator</p>
         
-        <div id="calculator">
-            <h2>Advanced Size Calculator</h2>
-            <select id="unit-selector" onchange="updateLabels()">
-                <option value="cm">Centimeters (cm)</option>
-                <option value="in">Inches (in)</option>
-            </select><br>
-            <select id="population-selector" onchange="updateStats()">
-                <option value="global">Global Average</option>
-                <!-- <option value="western">Western Average</option>
-                <option value="asian">Asian Average</option>
-                <option value="african">African Average</option>
-                <option value="european">European Average</option>
-                <option value="latin-american">Latin American Average</option>
-                <option value="plssize-me">PlsSize.Me Average</option> -->
-            </select><br>
-            <button onclick="window.location.href='how-to-measure.html'" class="button">How to Measure</button><br>
-            <label for="erect-length">Erect length (<span class="unit">cm</span>):</label>
-            <input type="number" id="erect-length" min="0" step="0.1"><br>
-            <label for="erect-girth">Erect girth (<span class="unit">cm</span>):</label>
-            <input type="number" id="erect-girth" min="0" step="0.1"><br>
-            <label for="flaccid-length">Flaccid length (<span class="unit">cm</span>):</label>
-            <input type="number" id="flaccid-length" min="0" step="0.1"><br>
-            <label for="flaccid-girth">Flaccid girth (<span class="unit">cm</span>):</label>
-            <input type="number" id="flaccid-girth" min="0" step="0.1"><br>
-            <button onclick="setTimeout(calculateAdvanced, 0);">Calculate</button>
-            <div id="advanced-result"></div>
-            <div id="size-comparison"></div>
-            <div id="pornstar-comparison"></div>
+        <div id="calculator" class="bg-white p-8 rounded-lg shadow-lg">
+            <h2 class="text-3xl font-semibold mb-6 text-gray-800">Advanced Size Calculator</h2>
+            <div class="mb-6">
+                <label for="unit-selector" class="block text-sm font-medium text-gray-700">Select Unit</label>
+                <select id="unit-selector" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" onchange="updateLabels()">
+                    <option value="cm">Centimeters (cm)</option>
+                    <option value="in">Inches (in)</option>
+                </select>
+            </div>
+            <div class="mb-6">
+                <label for="population-selector" class="block text-sm font-medium text-gray-700">Select Population</label>
+                <select id="population-selector" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" onchange="updateStats()">
+                    <option value="global">Global Average</option>
+                    <!-- Additional options can be added here -->
+                </select>
+            </div>
+            <button onclick="window.location.href='how-to-measure.html'" class="w-full bg-blue-500 text-white py-2 px-4 rounded-md mb-6">How to Measure</button>
+            <div class="mb-6">
+                <label for="erect-length" class="block text-sm font-medium text-gray-700">Erect length (<span class="unit">cm</span>):</label>
+                <input type="number" id="erect-length" min="0" step="0.1" class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            </div>
+            <div class="mb-6">
+                <label for="erect-girth" class="block text-sm font-medium text-gray-700">Erect girth (<span class="unit">cm</span>):</label>
+                <input type="number" id="erect-girth" min="0" step="0.1" class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            </div>
+            <div class="mb-6">
+                <label for="flaccid-length" class="block text-sm font-medium text-gray-700">Flaccid length (<span class="unit">cm</span>):</label>
+                <input type="number" id="flaccid-length" min="0" step="0.1" class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            </div>
+            <div class="mb-6">
+                <label for="flaccid-girth" class="block text-sm font-medium text-gray-700">Flaccid girth (<span class="unit">cm</span>):</label>
+                <input type="number" id="flaccid-girth" min="0" step="0.1" class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            </div>
+            <button onclick="setTimeout(calculateAdvanced, 0);" class="w-full bg-green-500 text-white py-2 px-4 rounded-md">Calculate</button>
+            <div id="advanced-result" class="mt-6"></div>
+            <div id="size-comparison" class="mt-6"></div>
+            <div id="pornstar-comparison" class="mt-6"></div>
             
             <!-- Visualization section -->
-            <div id="visualization">
-                <h3>Size Visualization</h3>
+            <div id="visualization" class="mt-8">
+                <h3 class="text-xl font-semibold mb-4 text-gray-800">Size Visualization</h3>
                 <canvas id="sizeChart" width="400" height="200"></canvas>
             </div>
-
-            
         </div>
 
-        <h2>General Statistics</h2>
-        <ul id="general-stats"></ul>
+        <h2 class="text-3xl font-semibold mt-12 mb-6 text-gray-800">General Statistics</h2>
+        <ul id="general-stats" class="list-disc pl-5 text-gray-700"></ul>
 
-        <p>Note: These statistics are based on a comprehensive review of multiple studies and may vary slightly depending on the specific population studied. Comparisons to adult film actors are based on publicly available information and may not be entirely accurate.</p>
+        <p class="mt-6 text-gray-600">Note: These statistics are based on a comprehensive review of multiple studies and may vary slightly depending on the specific population studied. Comparisons to adult film actors are based on publicly available information and may not be entirely accurate.</p>
 
-        <button onclick="window.location.href='accuracy.html'" class="button">Accuracy Information</button>
-        
-        <button onclick="window.location.href='database.html'" class="button">View Database</button>
-        <button onclick="window.location.href='user-info.html'" class="button">View Your Info</button>
+        <div class="mt-12">
+            <button onclick="window.location.href='accuracy.html'" class="w-full bg-yellow-500 text-white py-2 px-4 rounded-md mb-4">Accuracy Information</button>
+            <button onclick="window.location.href='database.html'" class="w-full bg-purple-500 text-white py-2 px-4 rounded-md mb-4">View Database</button>
+            <button onclick="window.location.href='user-info.html'" class="w-full bg-red-500 text-white py-2 px-4 rounded-md">View Your Info</button>
+        </div>
     </div>
 
-    
-    <footer>
+    <footer class="bg-gray-800 text-white text-center py-4 mt-12">
         <p>&copy; 2024 PlsSize.Me. All rights reserved.</p>
     </footer>
 
@@ -91,10 +97,17 @@
     <script>
         function showLoadingOverlay() {
             const overlay = document.getElementById('loadingOverlay');
-            overlay.style.display = 'block';
+            overlay.style.display = 'flex';
             setTimeout(() => {
                 overlay.style.display = 'none';
             }, 2000); 
+        }
+
+        function updateLabels() {
+            const unit = document.getElementById('unit-selector').value;
+            const unitElements = document.querySelectorAll('.unit');
+            unitElements.forEach(el => el.textContent = unit);
+            // Optionally, you can add code here to recalculate values based on the new unit
         }
     </script>
 </body>
