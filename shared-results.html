@@ -6,6 +6,7 @@
     <title>PlsSize.Me - Shared Penis Size Results</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.21.0"></script>
 </head>
 <body>
     <div class="container">
@@ -17,6 +18,12 @@
     </div>
 
     <script>
+        const SUPABASE_URL = 'https://lcayhsjrmjkwxekutiih.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxjYXloc2pybWprd3hla3V0aWloIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjUzMjQzNjMsImV4cCI6MjA0MDkwMDM2M30.HO8ykfrFvwxjhFt5XuDJ1aMvbbIRpnvYO4n18NqXqLc';
+        
+        // Initialize Supabase client
+        let supabaseClient;
+
         // Copy necessary data and functions from index.html
         const stats = {cm: {erectLength: { avg: 13.12, stdDev: 2.66 }, flaccidLength: { avg: 9.16, stdDev: 1.57 }, erectGirth: { avg: 11.66, stdDev: 1.10 }, flaccidGirth: { avg: 9.31, stdDev: 0.90 }}, in: {erectLength: { avg: 5.17, stdDev: 1.05 }, flaccidLength: { avg: 3.61, stdDev: 0.62 }, erectGirth: { avg: 4.59, stdDev: 0.43 }, flaccidGirth: { avg: 3.67, stdDev: 0.35 }}};
         const objectComparisons = {cm: [{ name: "AA battery", length: 5.0 }, { name: "Banana", length: 18.0 }, { name: "iPhone 12", length: 14.6 }, { name: "Soda can", length: 12.2 }, { name: "Credit card", length: 8.5 }, { name: "Golf ball", length: 4.3 }, { name: "Toothbrush", length: 19.0 }, { name: "Pencil", length: 19.0 }, { name: "Cucumber", length: 20.0 }, { name: "Remote control", length: 15.0 }, { name: "Hotdog", length: 15.2 }, { name: "Carrot", length: 16.0 }, { name: "Eggplant", length: 21.0 }, { name: "Corn on the cob", length: 17.8 }, { name: "Zucchini", length: 20.3 }], in: [{ name: "AA battery", length: 1.97 }, { name: "Banana", length: 7.09 }, { name: "iPhone 12", length: 5.75 }, { name: "Soda can", length: 4.80 }, { name: "Credit card", length: 3.35 }, { name: "Golf ball", length: 1.69 }, { name: "Toothbrush", length: 7.48 }, { name: "Pencil", length: 7.48 }, { name: "Cucumber", length: 7.87 }, { name: "Remote control", length: 5.91 }, { name: "Hotdog", length: 5.98 }, { name: "Carrot", length: 6.30 }, { name: "Eggplant", length: 8.27 }, { name: "Corn on the cob", length: 7.01 }, { name: "Zucchini", length: 7.99 }]};
@@ -49,10 +56,48 @@
             return string.charAt(0).toUpperCase() + string.slice(1);
         }
 
-        function displaySharedResults() {
+        async function initSupabase() {
+            supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        }
+
+        async function fetchVisitorData(visitorId) {
+            if (!supabaseClient) {
+                await initSupabase();
+            }
+            try {
+                const { data, error } = await supabaseClient
+                    .from('visitor_data')
+                    .select('*')
+                    .eq('visitorId', visitorId)
+                    .single();
+
+                if (error) throw error;
+
+                console.log('Fetched visitor data:', data);
+                return data;
+            } catch (error) {
+                console.error('Error fetching visitor data:', error);
+                return null;
+            }
+        }
+
+        async function displaySharedResults() {
             const urlParams = new URLSearchParams(window.location.search);
             const encodedParams = urlParams.get('d');
-            const [unit, erectLength, flaccidLength, erectGirth, flaccidGirth] = atob(encodedParams).split(',');
+            const visitorId = atob(encodedParams);
+
+            console.log('Decoded visitor ID:', visitorId);
+
+            const data = await fetchVisitorData(visitorId);
+
+            if (!data) {
+                console.error('No data found for visitor ID:', visitorId);
+                return;
+            }
+
+            console.log('Fetched data for visitor ID:', data);
+
+            const { unit, erectLength, flaccidLength, erectGirth, flaccidGirth } = data;
 
             const measurements = {
                 erectLength: parseFloat(erectLength),
@@ -81,6 +126,7 @@
             }
 
             result.innerHTML = resultHTML;
+            console.log('Displayed results:', resultHTML);
 
             // Update object size comparison
             let closestObject = objectComparisons[unit].reduce((prev, curr) => 
@@ -95,6 +141,7 @@
             }
             comparisonHTML += '</div>';
             comparison.innerHTML = comparisonHTML;
+            console.log('Displayed size comparison:', comparisonHTML);
 
             // Update pornstar comparisons
             let pornstarHTML = '<h3>Comparisons to Adult Film Actors:</h3>';
@@ -110,12 +157,13 @@
                 `;
             });
             pornstarComparison.innerHTML = pornstarHTML;
-
-                        // Removed chart button and calculations button
+            console.log('Displayed pornstar comparisons:', pornstarHTML);
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-            displaySharedResults();
+            initSupabase().then(() => {
+                displaySharedResults();
+            });
         });
     </script>
 </body>

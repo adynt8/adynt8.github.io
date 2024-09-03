@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlsSize.Me Database</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>PlsSize.Me Database</h1>
+        <div id="averages" class="result-box">
+            <p>Average Erect Length: <span id="avgErectLength">0</span> cm</p>
+            <p>Average Erect Girth: <span id="avgErectGirth">0</span> cm</p>
+            <p>Average Flaccid Length: <span id="avgFlaccidLength">0</span> cm</p>
+            <p>Average Flaccid Girth: <span id="avgFlaccidGirth">0</span> cm</p>
+        </div>
+        <div class="notice">
+            <p><strong>Note:</strong> The data presented here may be significantly skewed until a larger number of entries are collected. Please interpret the results with caution.</p>
+        </div>
+        <table id="databaseTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Visitor ID</th>
+                    <th>Erect Length (cm)</th>
+                    <th>Erect Girth (cm)</th>
+                    <th>Flaccid Length (cm)</th>
+                    <th>Flaccid Girth (cm)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Data will be inserted here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script src="scripts/database.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</body>
+</html>

@@ -6,12 +6,17 @@
     <title>PlsSize.Me - Advanced Penis Size Calculator</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.21.0"></script>
+    <script src="scripts/processData.js"></script>
 </head>
 <body>
     <div id="loadingOverlay" class="loading-overlay" style="display: none;">
         <div class="loading-spinner"></div>
     </div>
-    <div class="container">
+    
+    
+
+    <div class="container fade-in">
         <h1>PlsSize.Me - Advanced Penis Size Calculator</h1>
         <p>This tool provides detailed information about penis size statistics and allows you to compare your measurements to the average and to famous adult film actors.</p>
         
@@ -23,12 +28,12 @@
             </select><br>
             <select id="population-selector" onchange="updateStats()">
                 <option value="global">Global Average</option>
-                <option value="western">Western Average</option>
+                <!-- <option value="western">Western Average</option>
                 <option value="asian">Asian Average</option>
                 <option value="african">African Average</option>
                 <option value="european">European Average</option>
                 <option value="latin-american">Latin American Average</option>
-                <option value="plssize-me">PlsSize.Me Average</option>
+                <option value="plssize-me">PlsSize.Me Average</option> -->
             </select><br>
             <button onclick="window.location.href='how-to-measure.html'" class="button">How to Measure</button><br>
             <label for="erect-length">Erect length (<span class="unit">cm</span>):</label>
@@ -39,7 +44,7 @@
             <input type="number" id="flaccid-length" min="0" step="0.1"><br>
             <label for="flaccid-girth">Flaccid girth (<span class="unit">cm</span>):</label>
             <input type="number" id="flaccid-girth" min="0" step="0.1"><br>
-            <button onclick="calculateAdvanced()">Calculate</button>
+            <button onclick="setTimeout(calculateAdvanced, 0);">Calculate</button>
             <div id="advanced-result"></div>
             <div id="size-comparison"></div>
             <div id="pornstar-comparison"></div>
@@ -50,7 +55,7 @@
                 <canvas id="sizeChart" width="400" height="200"></canvas>
             </div>
 
-            <!-- Remove the progress tracker section -->
+            
         </div>
 
         <h2>General Statistics</h2>
@@ -59,22 +64,38 @@
         <p>Note: These statistics are based on a comprehensive review of multiple studies and may vary slightly depending on the specific population studied. Comparisons to adult film actors are based on publicly available information and may not be entirely accurate.</p>
 
         <button onclick="window.location.href='accuracy.html'" class="button">Accuracy Information</button>
+        
+        <button onclick="window.location.href='database.html'" class="button">View Database</button>
+        <button onclick="window.location.href='user-info.html'" class="button">View Your Info</button>
     </div>
+
+    
+    <footer>
+        <p>&copy; 2024 PlsSize.Me. All rights reserved.</p>
+    </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="scripts/localStorage.js"></script>
     <script src="scripts/loadingOverlay.js"></script>
-    <script src="scripts/populationStats.js"></script>
     <script src="scripts/objectComparisons.js"></script>
     <script src="scripts/pornstarComparisons.js"></script>
     <script src="scripts/femalePreferences.js"></script>
     <script src="scripts/visitorId.js"></script>
-    <script src="scripts/processData.js"></script>
     <script src="scripts/calculateAdvanced.js"></script>
     <script src="scripts/fetchSimilarImages.js"></script>
     <script src="scripts/shareResults.js"></script>
     <script src="scripts/utils.js"></script>
     <script src="scripts/visualization.js"></script>
-    <script src="scripts/main.js"></script>
+    <script type="module" src="scripts/populationStats.js"></script>
+    <script type="module" src="scripts/main.js"></script>
+    <script>
+        function showLoadingOverlay() {
+            const overlay = document.getElementById('loadingOverlay');
+            overlay.style.display = 'block';
+            setTimeout(() => {
+                overlay.style.display = 'none';
+            }, 2000); 
+        }
+    </script>
 </body>
 </html>
