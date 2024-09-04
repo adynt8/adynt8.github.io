@@ -135,20 +135,26 @@ function calculateAdvanced() {
         result.innerHTML = resultHTML;
 
         // Add most relevant object size comparison
-        let closestObject = objectComparisons[unit].reduce((prev, curr) => 
-            Math.abs(curr.length - erectLength) < Math.abs(prev.length - erectLength) ? curr : prev
-        );
+        let closestObject = objectComparisons[unit].reduce((prev, curr) => {
+            const prevDiff = Math.abs(curr.length - erectLength) + Math.abs(curr.girth - erectGirth);
+            const currDiff = Math.abs(prev.length - erectLength) + Math.abs(prev.girth - erectGirth);
+            return prevDiff < currDiff ? curr : prev;
+        });
 
         console.log('Object Size Comparison:');
-        console.log(`  Closest Object: ${closestObject.name} (${closestObject.length} ${unit})`);
+        console.log(`  Closest Object: ${closestObject.name} (Length: ${closestObject.length} ${unit}, Girth: ${closestObject.girth} ${unit})`);
 
         let comparisonHTML = '<div class="result-box"><h3>Most Relevant Size Comparison</h3>';
         comparisonHTML += `<p>${closestObject.name}</p>`;
-        comparisonHTML += `<p>(${closestObject.length} ${unit})</p>`;
-        if (erectLength >= closestObject.length) {
+        comparisonHTML += `<p>Length: ${closestObject.length} ${unit}, Girth: ${closestObject.girth} ${unit}</p>`;
+        if (erectLength >= closestObject.length && erectGirth >= closestObject.girth) {
+            comparisonHTML += `<p>Your Erect Length and Girth are Slightly Larger</p>`;
+        } else if (erectLength >= closestObject.length) {
             comparisonHTML += `<p>Your Erect Length is Slightly Longer</p>`;
+        } else if (erectGirth >= closestObject.girth) {
+            comparisonHTML += `<p>Your Erect Girth is Slightly Larger</p>`;
         } else {
-            comparisonHTML += `<p>Your Erect Length is Slightly Shorter</p>`;
+            comparisonHTML += `<p>Your Erect Length and Girth are Slightly Smaller</p>`;
         }
         comparisonHTML += '</div>';
         comparison.innerHTML = comparisonHTML;

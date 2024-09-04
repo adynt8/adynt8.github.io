@@ -47,10 +47,11 @@ document.addEventListener('DOMContentLoaded', async function() {
                     const row = tableBody.insertRow();
                     row.insertCell(0).innerText = index + 1;
                     row.insertCell(1).innerText = entry.visitorId;
-                    row.insertCell(2).innerText = entry.erectLength;
-                    row.insertCell(3).innerText = entry.erectGirth;
-                    row.insertCell(4).innerText = entry.flaccidLength;
-                    row.insertCell(5).innerText = entry.flaccidGirth;
+                    row.insertCell(2).innerText = entry.unit; // Added unit column
+                    row.insertCell(3).innerText = entry.erectLength;
+                    row.insertCell(4).innerText = entry.erectGirth;
+                    row.insertCell(5).innerText = entry.flaccidLength;
+                    row.insertCell(6).innerText = entry.flaccidGirth;
 
                     totalErectLength += entry.erectLength;
                     totalErectGirth += entry.erectGirth;
@@ -94,5 +95,3 @@ document.addEventListener('DOMContentLoaded', async function() {
         console.error('Error fetching data:', error);
     }
 });
-
-// Remove or comment out the populateTable function as it's no longer needed
