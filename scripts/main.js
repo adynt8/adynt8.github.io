@@ -163,7 +163,7 @@ function handleSharingChoice(share) {
 
 async function getUserCountry() {
     try {
-        const response = await fetch('http://ip-api.com/json/');
+        const response = await fetch('https://ip-api.com/json/');
         if (!response.ok) {
             throw new Error('Failed to fetch country information');
         }

@@ -83,12 +83,12 @@ function fetchSimilarImages(erectLength, unit) {
     }
 
     // Function to fetch and process posts from a subreddit
-    function fetchFromSubreddit(subreddit, after = '') {
-        console.log(`Fetching posts from r/${subreddit}${after ? ' after ' + after : ''}`);
-        return fetch(`https://www.reddit.com/r/${subreddit}.json?limit=100&after=${after}`)
+    function fetchFromSubreddit(subreddit) {
+        console.log(`Fetching top posts from r/${subreddit} for the last month`);
+        return fetch(`https://www.reddit.com/r/${subreddit}.json?limit=100&t=month`)
             .then(response => response.json())
             .then(data => {
-                console.log(`Received ${data.data.children.length} posts from r/${subreddit}`);
+                console.log(`Received ${data.data.children.length} top posts from r/${subreddit}`);
                 const filteredPosts = data.data.children.filter(post => {
                     const title = post.data.title.toLowerCase();
                     const inchMatch = title.match(/(\d+(\.\d+)?)\s*(inch|in|")/);
@@ -102,7 +102,7 @@ function fetchSimilarImages(erectLength, unit) {
                     }
                     return false;
                 });
-                return { posts: filteredPosts, after: data.data.after };
+                return { posts: filteredPosts };
             });
     }
 
@@ -112,14 +112,12 @@ function fetchSimilarImages(erectLength, unit) {
         let allSimilarPosts = [];
         for (const subreddit of subreddits) {
             console.log(`Searching r/${subreddit}`);
-            let after = '';
             let totalPosts = 0;
             while (totalPosts < 300) {
-                const { posts, after: newAfter } = await fetchFromSubreddit(subreddit, after);
+                const { posts } = await fetchFromSubreddit(subreddit);
                 allSimilarPosts = allSimilarPosts.concat(posts);
                 totalPosts += 100;
-                if (!newAfter) break;
-                after = newAfter;
+                if (posts.length < 100) break;
             }
             if (allSimilarPosts.length >= 5) {
                 break;
