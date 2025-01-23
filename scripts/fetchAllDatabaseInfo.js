@@ -37,6 +37,21 @@ document.addEventListener('DOMContentLoaded', async () => {
                 tableBody.appendChild(row);
             });
         }
+
+        const visitsPerDay = {};
+
+        // Assuming 'data' is the array of entries fetched from the database
+        data.forEach(entry => {
+            const date = new Date(entry.timestamp).toISOString().split('T')[0]; // Get the date in YYYY-MM-DD format
+            visitsPerDay[date] = (visitsPerDay[date] || 0) + 1; // Increment visit count for the date
+        });
+
+        // Populate the daily visits table
+        const dailyVisitEntries = document.getElementById('daily-visit-entries');
+        for (const [date, count] of Object.entries(visitsPerDay)) {
+            const row = `<tr><td class="py-2">${date}</td><td class="py-2">${count}</td></tr>`;
+            dailyVisitEntries.innerHTML += row;
+        }
     } catch (err) {
         console.error('Unexpected error:', err);
     }

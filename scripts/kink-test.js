@@ -101,8 +101,11 @@ function displayResults() {
         const results = processKinkTestResults(answers, isShortVersion, categoriesToUse);
         console.log('Results:', results); // Debugging: Log results to console
         resultsList.innerHTML = '';
-        const additionalMetricsList = document.getElementById('additional-metrics-list');
-        additionalMetricsList.innerHTML = '';
+
+        // Create a container for additional metrics
+        const additionalMetricsContainer = document.createElement('div');
+        additionalMetricsContainer.classList.add('mt-6', 'p-4', 'bg-gray-800', 'rounded-lg');
+        additionalMetricsContainer.innerHTML = '<h3 class="text-xl font-semibold mb-3">Additional Metrics</h3>';
 
         results.forEach(result => {
             const li = document.createElement('li');
@@ -112,20 +115,22 @@ function displayResults() {
             // Apply color based on score
             const score = parseFloat(result.rawScore);
             if (score >= 75) {
-                li.style.color = 'green'; // High interest
+                li.style.backgroundColor = 'rgba(72, 187, 120, 0.2)'; // High interest
             } else if (score >= 50) {
-                li.style.color = 'orange'; // Moderate interest
+                li.style.backgroundColor = 'rgba(237, 137, 54, 0.2)'; // Moderate interest
             } else {
-                li.style.color = 'red'; // Low interest
+                li.style.backgroundColor = 'rgba(229, 62, 62, 0.2)'; // Low interest
             }
 
-            // Separate additional metrics
             if (["Dominant Tendencies", "Submissive Tendencies", "Experimental Tendencies", "Taboo Tendencies"].includes(result.category)) {
-                additionalMetricsList.appendChild(li);
+                additionalMetricsContainer.appendChild(li);
             } else {
                 resultsList.appendChild(li);
             }
         });
+
+        // Append additional metrics container to results
+        resultsContainer.insertBefore(additionalMetricsContainer, document.getElementById('retake-test'));
     }, 500);
 }
 
@@ -162,3 +167,14 @@ function autoFillAnswers() {
 }
 
 autoFillButton.addEventListener('click', autoFillAnswers);
+
+function resetTest() {
+    testSelection.style.display = 'block';
+    testContainer.style.display = 'none';
+    resultsContainer.style.display = 'none';
+    currentCategory = 0;
+    answers.length = 0;
+    updateProgressBar();
+}
+
+document.getElementById('retake-test').addEventListener('click', resetTest);
