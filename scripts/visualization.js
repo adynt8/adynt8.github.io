@@ -4,7 +4,12 @@
 let sizeChart;
 
 function initializeChart() {
-    const ctx = document.getElementById('sizeChart').getContext('2d');
+    const canvas = document.getElementById('sizeChart');
+    if (!canvas) {
+        console.log('Size chart canvas not found, skipping initialization');
+        return;
+    }
+    const ctx = canvas.getContext('2d');
     sizeChart = new Chart(ctx, {
         type: 'bar',
         data: {
@@ -35,6 +40,10 @@ function initializeChart() {
 }
 
 function updateVisualization(userMeasurements, populationAverage, unit) {
+    if (!sizeChart) {
+        console.log('Size chart not initialized, skipping visualization update');
+        return;
+    }
     sizeChart.data.datasets[0].data = [
         userMeasurements.erectLength,
         userMeasurements.erectGirth,

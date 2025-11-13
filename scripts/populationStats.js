@@ -27,6 +27,11 @@ const populationStats = {
 
 let stats = populationStats.global;
 
+// Initialize window.stats immediately
+if (typeof window !== 'undefined') {
+    window.stats = stats;
+}
+
 async function updateStats() {
     const population = document.getElementById('population-selector').value;
 
@@ -43,6 +48,11 @@ async function updateStats() {
         }
     } else {
         stats = populationStats[population] || populationStats.global;
+    }
+
+    // Update window.stats whenever stats changes
+    if (typeof window !== 'undefined') {
+        window.stats = stats;
     }
 
     console.log('Current stats:', stats);
@@ -161,10 +171,13 @@ function updateGeneralStats() {
 }
 
 // Make stats and updateStats globally accessible
-window.stats = stats;
-window.updateStats = async function() {
-    await updateStats();
-};
+if (typeof window !== 'undefined') {
+    window.stats = stats;
+    window.updateStats = async function() {
+        await updateStats();
+    };
+    console.log('Stats exported to window:', window.stats);
+}
 
 // Export these functions so they can be used globally
 export { updateLabels, updateGeneralStats, updateStats, getPlsSizeMeStats, stats };
