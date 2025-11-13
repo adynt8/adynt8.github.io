@@ -57,6 +57,11 @@ function calculateAdvanced() {
         for (let [key, value] of Object.entries(measurements)) {
             if (!isNaN(value)) {
                 // Use the latest stats from window.stats
+                if (!window.stats || !window.stats[unit] || !window.stats[unit][key]) {
+                    console.error('Stats not loaded yet');
+                    result.innerHTML = "<div class='result-box'><h3>Error</h3><p>Statistics data is still loading. Please try again in a moment.</p></div>";
+                    return;
+                }
                 const { avg, stdDev } = window.stats[unit][key];
                 const percentile = calculatePercentile(value, avg, stdDev);
                 const difference = value - avg;

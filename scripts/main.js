@@ -1,7 +1,8 @@
 import { updateLabels, updateGeneralStats, stats } from './populationStats.js';
 
-// Make stats globally accessible (if not already done in populationStats.js)
+// Make stats globally accessible immediately
 window.stats = stats;
+console.log('Stats initialized in main.js:', window.stats);
 
 // Make these functions available globally
 window.viewSizeChart = viewSizeChart;
