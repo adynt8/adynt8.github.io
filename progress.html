@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Progress Tracker — PlsSize.Me</title>
+  <meta name="description" content="Log your measurements over time and see the trend. Stored only on your device.">
+  <link rel="canonical" href="https://plssize.me/progress.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Progress Tracker — PlsSize.Me">
+  <meta property="og:description" content="Log your measurements over time and see the trend. Stored only on your device.">
+  <meta property="og:image" content="https://plssize.me/android-chrome-512x512.png">
+  <meta name="theme-color" content="#2f80ed">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="android-chrome-192x192.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="stylesheet" href="css/site.css">
+  <script src="js/boot.js"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z4Q23E9QXZ"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3286392498569665" crossorigin="anonymous"></script>
+  <script type="module" src="js/pages/progress.js"></script>
+</head>
+<body>
+<main>
+  <section class="hero">
+    <h1>Progress tracker</h1>
+    <p>Log measurements over time. Your log stays on this device; export it any time.</p>
+  </section>
+
+  <form id="log-form" class="card" novalidate>
+    <div class="card-head">
+      <h2>New entry</h2>
+      <div class="segmented" role="radiogroup" aria-label="Units">
+        <label><input type="radio" name="unit" value="cm"><span>cm</span></label>
+        <label><input type="radio" name="unit" value="in"><span>inches</span></label>
+      </div>
+    </div>
+    <div class="grid grid-4">
+      <div class="field"><label for="erectLength">Erect length</label><div class="input-unit"><input type="number" id="erectLength" name="erectLength" step="0.1" min="0"><span class="unit">cm</span></div></div>
+      <div class="field"><label for="erectGirth">Erect girth</label><div class="input-unit"><input type="number" id="erectGirth" name="erectGirth" step="0.1" min="0"><span class="unit">cm</span></div></div>
+      <div class="field"><label for="flaccidLength">Flaccid length</label><div class="input-unit"><input type="number" id="flaccidLength" name="flaccidLength" step="0.1" min="0"><span class="unit">cm</span></div></div>
+      <div class="field"><label for="flaccidGirth">Flaccid girth</label><div class="input-unit"><input type="number" id="flaccidGirth" name="flaccidGirth" step="0.1" min="0"><span class="unit">cm</span></div></div>
+    </div>
+    <div class="field" style="margin-top:12px"><label for="note">Note <span class="hint">(optional)</span></label><input type="text" id="note" name="note" maxlength="140" placeholder="e.g. morning, measured 3 times"></div>
+    <div class="row" style="margin-top:16px">
+      <button class="btn primary" type="submit">Add entry</button>
+      <span class="muted">Tip: measure at the same time of day, the same way, and average three readings.</span>
+    </div>
+  </form>
+
+  <section class="card">
+    <div class="card-head">
+      <h2>Trend</h2>
+      <div class="legend" id="legend"></div>
+    </div>
+    <div id="trend"></div>
+  </section>
+
+  <section class="card">
+    <div class="card-head">
+      <h2>History</h2>
+      <div class="row">
+        <button type="button" id="export-csv" class="btn">Export CSV</button>
+        <label class="btn" for="import-file">Import</label>
+        <input type="file" id="import-file" accept=".json,.csv,application/json,text/csv" class="sr-only">
+      </div>
+    </div>
+    <div id="history"></div>
+  </section>
+</main>
+</body>
+</html>

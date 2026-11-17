@@ -1,60 +1,63 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PlsSize.Me - Camera Measurement</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <style>
-        #video, #canvas {
-            max-width: 100%;
-            height: auto;
-        }
-        .fade-in {
-            animation: fadeIn 1s;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        #calibration-instructions {
-            display: none;
-            background-color: #f9f9f9;
-            border: 1px solid #ccc;
-            padding: 10px;
-            margin-top: 10px;
-        }
-    </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Measure From a Photo — PlsSize.Me</title>
+  <meta name="description" content="Measure length from a photo using a credit card for scale. Runs entirely in your browser; images are never uploaded.">
+  <link rel="canonical" href="https://plssize.me/camera-measure.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Measure From a Photo — PlsSize.Me">
+  <meta property="og:description" content="Measure length from a photo using a credit card for scale. Runs entirely in your browser; images are never uploaded.">
+  <meta property="og:image" content="https://plssize.me/android-chrome-512x512.png">
+  <meta name="theme-color" content="#2f80ed">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="android-chrome-192x192.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="stylesheet" href="css/site.css">
+  <script src="js/boot.js"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z4Q23E9QXZ"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3286392498569665" crossorigin="anonymous"></script>
+  <script type="module" src="js/pages/photo-measure.js"></script>
 </head>
 <body>
-    <div class="container">
-        <h1>Camera Measurement</h1>
-        <p id="instructions" class="fade-in">Use your camera or upload an image to measure. Please ensure proper lighting and follow the on-screen instructions.</p>
-        
-        <div id="camera-container">
-            <video id="video" autoplay playsinline></video>
-            <canvas id="canvas" style="display:none;"></canvas>
-        </div>
-        
-        <button id="capture-btn" class="fade-in">Capture Image</button>
-        <input type="file" id="file-input" accept="image/*" style="display: none;">
-        <button id="upload-btn" class="fade-in">Upload Image</button>
-        <button id="calibrate-btn" style="display:none;" class="fade-in">Calibrate</button>
-        <button id="measure-btn" style="display:none;" class="fade-in">Measure</button>
-        
-        <div id="result" class="fade-in"></div>
-        
-        <div id="calibration-instructions" class="fade-in">
-            <strong>Calibration Instructions:</strong><br>
-            1. Place a credit card or ID card in the image.<br>
-            2. Draw a line along the long edge of the card.<br>
-            3. Select the type of card you used when prompted.
-        </div>
-        
-        <button onclick="window.location.href='index.html'" class="button fade-in">Back to Calculator</button>
-    </div>
+<main>
+  <section class="hero">
+    <h1>Measure from a photo</h1>
+    <p>Use a bank card as a scale reference. The photo is processed only in your browser and never uploaded.</p>
+  </section>
 
-    <script src="scripts/cameraMeasure.js"></script>
+  <div class="notice">For an accurate result, the card and the penis must be in the <strong>same photo</strong>, at the same distance from the camera, with the camera pointing straight at them (not at an angle).</div>
+
+  <section class="card">
+    <ol class="steps" id="step-list">
+      <li id="s1"><strong>Choose a photo</strong> that includes a standard bank/ID card (85.6 × 54 mm).</li>
+      <li id="s2"><strong>Mark the card:</strong> drag a line along the card's long edge.</li>
+      <li id="s3"><strong>Mark the length:</strong> drag a line along the top, from the base at the pubic bone to the tip.</li>
+    </ol>
+    <div class="row">
+      <label class="btn primary" for="file-input">Choose or take a photo</label>
+      <input type="file" id="file-input" accept="image/*" capture="environment" class="sr-only">
+      <button type="button" id="undo-btn" class="btn" disabled>Undo last line</button>
+      <button type="button" id="reset-btn" class="btn ghost" disabled>Start over</button>
+    </div>
+  </section>
+
+  <section id="work" class="card hidden">
+    <p id="instruction" class="tag" style="margin-bottom:12px"></p>
+    <canvas id="canvas" style="width:100%;height:auto;touch-action:none;border-radius:10px;cursor:crosshair;display:block"></canvas>
+    <div id="result" class="hidden" style="margin-top:16px">
+      <div class="result">
+        <h3>Measured length</h3>
+        <div class="big" id="result-value"></div>
+        <p>Accuracy depends on camera angle and how precisely the lines are placed — expect ±0.5 cm.</p>
+      </div>
+      <div class="row" style="margin-top:12px">
+        <button type="button" id="use-length" class="btn primary">Use as erect length</button>
+        <button type="button" id="use-flaccid" class="btn">Use as flaccid length</button>
+      </div>
+    </div>
+  </section>
+</main>
 </body>
 </html>
