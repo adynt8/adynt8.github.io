@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Methodology &amp; Sources — PlsSize.Me</title>
+  <meta name="description" content="Where PlsSize.Me's numbers come from, how percentiles and condom sizes are calculated, and the limits of the data.">
+  <link rel="canonical" href="https://plssize.me/methodology.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Methodology &amp; Sources — PlsSize.Me">
+  <meta property="og:description" content="Where PlsSize.Me's numbers come from, how percentiles and condom sizes are calculated, and the limits of the data.">
+  <meta property="og:image" content="https://plssize.me/android-chrome-512x512.png">
+  <meta name="theme-color" content="#2f80ed">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="android-chrome-192x192.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="stylesheet" href="css/site.css">
+  <script src="js/boot.js"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z4Q23E9QXZ"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3286392498569665" crossorigin="anonymous"></script>
+  <script type="module" src="js/layout.js"></script>
+</head>
+<body>
+<main>
+  <section class="hero">
+    <h1>Methodology &amp; sources</h1>
+    <p>Where the numbers come from, how they're calculated, and what they can't tell you.</p>
+  </section>
+
+  <article class="card prose">
+    <h2 style="margin-top:0" id="data">Reference data</h2>
+    <p><strong>Global — clinician measured.</strong> The default comparison is the systematic review by Veale et al. (2015), which pooled studies covering up to 15,521 men where a health professional took the measurements using a standard technique. Because researchers measured, it avoids the over-reporting common in self-measured surveys.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Measurement</th><th class="num">Mean</th><th class="num">SD</th></tr></thead>
+      <tbody>
+        <tr><td>Erect length</td><td class="num">13.12 cm (5.17 in)</td><td class="num">1.66 cm</td></tr>
+        <tr><td>Erect girth</td><td class="num">11.66 cm (4.59 in)</td><td class="num">1.10 cm</td></tr>
+        <tr><td>Flaccid length</td><td class="num">9.16 cm (3.61 in)</td><td class="num">1.57 cm</td></tr>
+        <tr><td>Flaccid girth</td><td class="num">9.31 cm (3.67 in)</td><td class="num">0.90 cm</td></tr>
+      </tbody>
+    </table></div>
+    <p style="margin-top:1em"><strong>United States — self measured.</strong> Herbenick et al. (2014) asked 1,661 men to measure themselves at home to order custom-fit condoms: mean erect length 14.15 cm (SD 2.66), mean erect girth 12.23 cm (SD 2.23). Self-measurement and the wider spread make this a more forgiving comparison.</p>
+    <p><strong>PlsSize.Me community.</strong> Visitors can anonymously share their measurements. Once at least 30 plausible entries exist for a measurement, you can compare against them. These are self-reported and self-selected, so they almost certainly skew large.</p>
+    <p><strong>Partner preference.</strong> Prause et al. (2015) asked 75 women to choose among 3D-printed models. The average preferred size for a long-term partner was 16.0 cm long and 12.2 cm around; for a one-time partner, 16.3 cm and 12.7 cm. It's a small study of one population — treat it as a curiosity.</p>
+    <p><strong>A note on trends.</strong> A 2023 meta-analysis (Belladelli et al.) found that reported erect length increased over the past three decades, to a pooled mean of 13.93 cm. Averages are snapshots, not fixed facts.</p>
+
+    <h2 id="formulas">Formulas</h2>
+    <p><strong>Percentile.</strong> We assume each measurement is normally distributed and compute the z-score <code>z = (x − mean) / SD</code>, then the cumulative probability <code>Φ(z) = ½·(1 + erf(z/√2))</code>. Real size distributions have heavier tails than a normal curve, so percentiles beyond about the 2nd or 98th are rough.</p>
+    <p><strong>Condom nominal width.</strong> <code>nominal width (mm) ≈ 0.45 × girth (mm)</code>. A flat condom's width is half its circumference; condoms are designed about 10% smaller than the penis so they stay put, which gives 0.5 × 0.9 = 0.45.</p>
+    <p><strong>Volume.</strong> Treating the shaft as a cylinder: <code>V = girth² × length / 4π</code>. Real shapes taper, so this overestimates slightly.</p>
+    <p><strong>Surface area.</strong> Lateral area of the same cylinder: <code>A = girth × length</code>.</p>
+    <p><strong>Photo measurement.</strong> A standard bank card's long edge is 85.6 mm. Dividing that by the length of the line you draw along it gives millimetres per pixel, which scales the second line. Perspective and lens distortion add error if the camera isn't square to the subject.</p>
+
+    <h2 id="limits">Limitations</h2>
+    <ul>
+      <li>Most studies measure young adult volunteers from a handful of countries. There isn't good data to compare ethnic or national groups reliably, so we don't offer those comparisons.</li>
+      <li>How you measure matters more than you'd think — bone-pressed vs not, tape vs ruler, how full the erection is. See <a href="how-to-measure.html">how to measure</a>.</li>
+      <li>This site is for information and entertainment. It isn't medical advice. If size causes you distress, a doctor or therapist can help; most men who worry about size are well within the normal range.</li>
+    </ul>
+
+    <h2 id="sources">Sources</h2>
+    <ol id="source-list">
+      <li>Veale D, Miles S, Bramley S, Muir G, Hodsoll J. Am I normal? A systematic review and construction of nomograms for flaccid and erect penis length and circumference in up to 15,521 men. <em>BJU International</em>. 2015;115(6):978–986. <a href="https://pubmed.ncbi.nlm.nih.gov/25487360/" target="_blank" rel="noopener">PubMed</a></li>
+      <li>Herbenick D, Reece M, Schick V, Sanders SA. Erect penile length and circumference dimensions of 1,661 sexually active men in the United States. <em>Journal of Sexual Medicine</em>. 2014;11(1):93–101. <a href="https://pubmed.ncbi.nlm.nih.gov/23841855/" target="_blank" rel="noopener">PubMed</a></li>
+      <li>Prause N, Park J, Leung S, Miller G. Women's preferences for penis size: a new research method using selection among 3D models. <em>PLOS ONE</em>. 2015;10(9):e0133079. <a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0133079" target="_blank" rel="noopener">Full text</a></li>
+      <li>Belladelli F, Del Giudice F, Glover F, et al. Worldwide temporal trends in penile length: a systematic review and meta-analysis. <em>World Journal of Men's Health</em>. 2023;41(4):848–860. <a href="https://pubmed.ncbi.nlm.nih.gov/36792094/" target="_blank" rel="noopener">PubMed</a></li>
+    </ol>
+  </article>
+</main>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Community Stats — PlsSize.Me</title>
+  <meta name="description" content="Aggregate, anonymous measurements shared by PlsSize.Me visitors, compared with clinical research.">
+  <link rel="canonical" href="https://plssize.me/community.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Community Stats — PlsSize.Me">
+  <meta property="og:description" content="Aggregate, anonymous measurements shared by PlsSize.Me visitors, compared with clinical research.">
+  <meta property="og:image" content="https://plssize.me/android-chrome-512x512.png">
+  <meta name="theme-color" content="#2f80ed">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="android-chrome-192x192.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="stylesheet" href="css/site.css">
+  <script src="js/boot.js"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z4Q23E9QXZ"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3286392498569665" crossorigin="anonymous"></script>
+  <script type="module" src="js/pages/community.js"></script>
+</head>
+<body>
+<main>
+  <section class="hero">
+    <h1>Community stats</h1>
+    <p>Anonymous measurements shared by visitors who opted in. Only totals and averages are shown — never individual entries.</p>
+  </section>
+
+  <div class="notice warn">Self-reported, self-selected data. People with larger measurements are more likely to share, and home measurements tend to read longer than clinical ones. Treat these numbers as curiosity, not science.</div>
+
+  <div id="status" class="card empty">Loading community data…</div>
+
+  <div id="content" class="hidden">
+    <div class="card">
+      <div class="segmented" role="radiogroup" aria-label="Units">
+        <label><input type="radio" name="unit" value="cm"><span>cm</span></label>
+        <label><input type="radio" name="unit" value="in"><span>inches</span></label>
+      </div>
+      <div id="kpis" class="grid grid-4" style="margin-top:16px"></div>
+    </div>
+    <div class="card">
+      <h2>Community vs. clinical research</h2>
+      <div id="table"></div>
+    </div>
+    <div id="histograms" class="grid grid-2"></div>
+    <p class="muted center">Want to be counted? Turn on sharing in <a href="user-info.html">Your data</a>.</p>
+  </div>
+</main>
+</body>
+</html>

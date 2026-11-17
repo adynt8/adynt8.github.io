@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Visual Size Comparison — PlsSize.Me</title>
+  <meta name="description" content="Compare sizes side by side, to scale: you vs. the average, partner preference, everyday objects or any custom size.">
+  <link rel="canonical" href="https://plssize.me/compare.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Visual Size Comparison — PlsSize.Me">
+  <meta property="og:description" content="Compare sizes side by side, to scale: you vs. the average, partner preference, everyday objects or any custom size.">
+  <meta property="og:image" content="https://plssize.me/android-chrome-512x512.png">
+  <meta name="theme-color" content="#2f80ed">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="android-chrome-192x192.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="stylesheet" href="css/site.css">
+  <script src="js/boot.js"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z4Q23E9QXZ"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3286392498569665" crossorigin="anonymous"></script>
+  <script type="module" src="js/pages/compare.js"></script>
+</head>
+<body>
+<main>
+  <section class="hero">
+    <h1>Visual comparison</h1>
+    <p>Side-by-side, to scale. Compare yourself with the average, a custom size or everyday objects.</p>
+  </section>
+
+  <div class="grid grid-2">
+    <div class="card">
+      <h2>Left: <span id="a-title">You</span></h2>
+      <div class="field"><label for="a-source">Show</label><select id="a-source"></select></div>
+      <div class="grid grid-2" style="margin-top:12px">
+        <div class="field"><label for="a-length">Length</label><div class="input-unit"><input type="number" id="a-length" step="0.1" min="0"><span class="unit">cm</span></div></div>
+        <div class="field"><label for="a-girth">Girth</label><div class="input-unit"><input type="number" id="a-girth" step="0.1" min="0"><span class="unit">cm</span></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Right: <span id="b-title">Average</span></h2>
+      <div class="field"><label for="b-source">Show</label><select id="b-source"></select></div>
+      <div class="grid grid-2" style="margin-top:12px">
+        <div class="field"><label for="b-length">Length</label><div class="input-unit"><input type="number" id="b-length" step="0.1" min="0"><span class="unit">cm</span></div></div>
+        <div class="field"><label for="b-girth">Girth</label><div class="input-unit"><input type="number" id="b-girth" step="0.1" min="0"><span class="unit">cm</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head">
+      <div class="segmented" role="radiogroup" aria-label="State">
+        <label><input type="radio" name="state" value="erect" checked><span>Erect</span></label>
+        <label><input type="radio" name="state" value="flaccid"><span>Flaccid</span></label>
+      </div>
+      <div class="segmented" role="radiogroup" aria-label="Units">
+        <label><input type="radio" name="unit" value="cm"><span>cm</span></label>
+        <label><input type="radio" name="unit" value="in"><span>inches</span></label>
+      </div>
+    </div>
+    <div id="stage"></div>
+    <div id="diff" class="grid grid-3" style="margin-top:16px"></div>
+  </div>
+</main>
+</body>
+</html>

@@ -1,164 +1,121 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-Z4Q23E9QXZ"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-Z4Q23E9QXZ');
-</script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PlsSize.Me - Advanced Penis Size Calculator</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.21.0"></script>
-    <script src="scripts/processData.js"></script>
-    <link rel="stylesheet" href="styles.css">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3286392498569665"
-     crossorigin="anonymous"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PlsSize.Me — Penis Size Calculator &amp; Percentiles</title>
+  <meta name="description" content="Find out how your size compares. Free, private penis size calculator with percentiles from peer-reviewed studies, condom sizing, visual comparisons and progress tracking.">
+  <link rel="canonical" href="https://plssize.me/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="PlsSize.Me — Penis Size Calculator">
+  <meta property="og:description" content="Private size calculator with percentiles from peer-reviewed research.">
+  <meta property="og:url" content="https://plssize.me/">
+  <meta property="og:image" content="https://plssize.me/android-chrome-512x512.png">
+  <meta name="theme-color" content="#2f80ed">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="android-chrome-192x192.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="stylesheet" href="css/site.css">
+  <script src="js/boot.js"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z4Q23E9QXZ"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3286392498569665" crossorigin="anonymous"></script>
+  <script type="module" src="js/pages/calculator.js"></script>
 </head>
-<body class="bg-gray-100 text-gray-900">
-    <div id="loadingOverlay" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center" style="display: none;">
-        <div class="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-32 w-32"></div>
+<body>
+<main>
+  <section class="hero">
+    <h1>How do you measure up?</h1>
+    <p>Enter your measurements to see percentiles from peer-reviewed research. Everything is calculated on your device.</p>
+  </section>
+
+  <div class="ad-slot" data-ad-slot="7834450535"></div>
+
+  <form id="calc-form" class="card" novalidate>
+    <div class="card-head">
+      <h2>Your measurements</h2>
+      <div class="segmented" role="radiogroup" aria-label="Units">
+        <label><input type="radio" name="unit" value="cm"><span>cm</span></label>
+        <label><input type="radio" name="unit" value="in"><span>inches</span></label>
+      </div>
     </div>
 
-    <div class="mt-12">
-        <!-- Google AdSense Auto Ad Space -->
-        <div class="adsense-ad" style="min-height: 250px; background-color: #f0f0f0; margin-bottom: 20px;">
-           <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3286392498569665"
-     crossorigin="anonymous"></script>
-<!-- TOP -->
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-3286392498569665"
-     data-ad-slot="7834450535"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-        </div>
+    <div class="grid grid-2">
+      <div class="field">
+        <label for="erectLength">Erect length</label>
+        <div class="input-unit"><input type="number" id="erectLength" name="erectLength" inputmode="decimal" min="0" step="0.1" placeholder="e.g. 13.1"><span class="unit">cm</span></div>
+        <span class="hint">Top side, ruler pressed to the pubic bone.</span>
+      </div>
+      <div class="field">
+        <label for="erectGirth">Erect girth</label>
+        <div class="input-unit"><input type="number" id="erectGirth" name="erectGirth" inputmode="decimal" min="0" step="0.1" placeholder="e.g. 11.7"><span class="unit">cm</span></div>
+        <span class="hint">Circumference around mid-shaft.</span>
+      </div>
+      <div class="field">
+        <label for="flaccidLength">Flaccid length <span class="hint">(optional)</span></label>
+        <div class="input-unit"><input type="number" id="flaccidLength" name="flaccidLength" inputmode="decimal" min="0" step="0.1" placeholder="e.g. 9.2"><span class="unit">cm</span></div>
+      </div>
+      <div class="field">
+        <label for="flaccidGirth">Flaccid girth <span class="hint">(optional)</span></label>
+        <div class="input-unit"><input type="number" id="flaccidGirth" name="flaccidGirth" inputmode="decimal" min="0" step="0.1" placeholder="e.g. 9.3"><span class="unit">cm</span></div>
+      </div>
     </div>
 
-    <div class="container mx-auto p-4">
-        <h1 class="text-5xl font-bold text-center mb-6 text-blue-600">PlsSize.Me</h1>
-        <p class="text-center mb-8 text-lg text-gray-700">Advanced Penis Size Calculator</p>
-        
-        <div id="calculator" class="bg-white p-8 rounded-lg shadow-lg">
-            <h2 class="text-3xl font-semibold mb-6 text-gray-800">Advanced Size Calculator</h2>
-            <div class="mb-6">
-                <label for="unit-selector" class="block text-sm font-medium text-gray-700">Select Unit</label>
-                <select id="unit-selector" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" onchange="updateLabels()">
-                    <option value="cm">Centimeters (cm)</option>
-                    <option value="in">Inches (in)</option>
-                </select>
-            </div>
-            <div class="mb-6">
-                <label for="population-selector" class="block text-sm font-medium text-gray-700">Select Population</label>
-                <select id="population-selector" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" onchange="updateStats()">
-                    <option value="global">Global Average</option>
-                    <!-- Additional options can be added here -->
-                </select>
-            </div>
-            <button onclick="window.location.href='how-to-measure.html'" class="w-full bg-blue-500 text-white py-2 px-4 rounded-md mb-6">How to Measure</button>
-            <div class="mb-6">
-                <label for="erect-length" class="block text-sm font-medium text-gray-700">Erect length (<span class="unit">cm</span>):</label>
-                <input type="number" id="erect-length" min="0" step="0.1" class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-            </div>
-            <div class="mb-6">
-                <label for="erect-girth" class="block text-sm font-medium text-gray-700">Erect girth (<span class="unit">cm</span>):</label>
-                <input type="number" id="erect-girth" min="0" step="0.1" class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-            </div>
-            <div class="mb-6">
-                <label for="flaccid-length" class="block text-sm font-medium text-gray-700">Flaccid length (<span class="unit">cm</span>):</label>
-                <input type="number" id="flaccid-length" min="0" step="0.1" class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-            </div>
-            <div class="mb-6">
-                <label for="flaccid-girth" class="block text-sm font-medium text-gray-700">Flaccid girth (<span class="unit">cm</span>):</label>
-                <input type="number" id="flaccid-girth" min="0" step="0.1" class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-            </div>
-            <!-- Ball size calculator section removed -->
-            <button onclick="setTimeout(calculateAdvanced, 0);" class="w-full bg-green-500 text-white py-2 px-4 rounded-md">Calculate</button>
-            <div id="advanced-result" class="mt-6"></div>
-            <div id="size-comparison" class="mt-6"></div>
-            <div id="pornstar-comparison" class="mt-6"></div>
-            
-            <!-- Visualization section -->
-            <!-- <div id="visualization" class="mt-8"> -->
-            <!--     <h3 class="text-xl font-semibold mb-4 text-gray-800">Size Visualization</h3> -->
-            <!--     <canvas id="sizeChart" width="400" height="200"></canvas> -->
-            <!-- </div> -->
-        </div>
+    <div id="input-warning" class="notice warn hidden" style="margin-top:16px" role="alert"></div>
 
-        <h2 class="text-3xl font-semibold mt-12 mb-6 text-gray-800">General Statistics</h2>
-        
-        <!-- Google AdSense Auto Ad Space -->
-        <div class="adsense-ad" style="min-height: 250px; background-color: #f0f0f0; margin-bottom: 20px;">
-           <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3286392498569665"
-     crossorigin="anonymous"></script>
-<!-- Bottom -->
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-3286392498569665"
-     data-ad-slot="2155582592"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-        </div>
-        
-        <ul id="general-stats" class="list-disc pl-5 text-gray-700"></ul>
-
-        <p class="mt-6 text-gray-600">Note: These statistics are based on a comprehensive review of multiple studies and may vary slightly depending on the specific population studied. Comparisons to adult film actors are based on publicly available information and may not be entirely accurate.</p>
-
-        <div class="mt-12">
-            <button onclick="window.location.href='accuracy.html'" class="w-full bg-yellow-500 text-white py-2 px-4 rounded-md mb-4">Accuracy Information</button>
-            <button onclick="window.location.href='database.html'" class="w-full bg-purple-500 text-white py-2 px-4 rounded-md mb-4">View Database</button>
-            <button onclick="window.location.href='user-info.html'" class="w-full bg-red-500 text-white py-2 px-4 rounded-md">View Your Info</button>
-        </div>
+    <div class="field" style="margin-top:16px">
+      <label for="population">Compare against</label>
+      <select id="population" name="population"></select>
+      <span class="hint" id="population-desc"></span>
     </div>
 
-    <footer class="bg-gray-800 text-white text-center py-4 mt-12">
-        <p>&copy; 2024 PlsSize.Me. All rights reserved.</p>
-    </footer>
+    <div class="row" style="margin-top:18px">
+      <button type="submit" class="btn primary lg">Show my results</button>
+      <a class="btn" href="how-to-measure.html">How to measure</a>
+      <a class="btn" href="camera-measure.html">Measure from a photo</a>
+      <span class="spacer"></span>
+      <button type="button" id="clear-btn" class="btn ghost">Clear</button>
+    </div>
+  </form>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="scripts/localStorage.js"></script>
-    <script src="scripts/loadingOverlay.js"></script>
-    <script src="scripts/objectComparisons.js"></script>
-    <script src="scripts/pornstarComparisons.js"></script>
-    <script src="scripts/femalePreferences.js"></script>
-    <script src="scripts/visitorId.js"></script>
-    <script src="scripts/calculateAdvanced.js"></script>
-    <script src="scripts/fetchSimilarImages.js"></script>
-    <script src="scripts/shareResults.js"></script>
-    <script src="scripts/utils.js"></script>
-    <script src="scripts/visualization.js"></script>
-    <script type="module" src="scripts/populationStats.js"></script>
-    <script type="module" src="scripts/main.js"></script>
-    <script src="https://unpkg.com/@supabase/supabase-js"></script>
-    <script type="module" src="scripts/database.js"></script>
-    <script type="module" src="scripts/kinkTest.js"></script>
-    <script>
-        function showLoadingOverlay() {
-            const overlay = document.getElementById('loadingOverlay');
-            overlay.style.display = 'flex';
-            setTimeout(() => {
-                overlay.style.display = 'none';
-            }, 2000); 
-        }
+  <section id="results" class="hidden" aria-live="polite">
+    <div class="card-head">
+      <h2>Your results</h2>
+      <div class="row no-print">
+        <button type="button" id="share-btn" class="btn">Share</button>
+        <button type="button" id="save-btn" class="btn">Save to progress</button>
+        <a id="chart-link" class="btn" href="size-chart.html">Distribution chart</a>
+      </div>
+    </div>
+    <div id="results-body"></div>
+    <p id="sharing-status" class="muted" style="margin-top:16px"></p>
+  </section>
 
-        function updateLabels() {
-            const unit = document.getElementById('unit-selector').value;
-            const unitElements = document.querySelectorAll('.unit');
-            unitElements.forEach(el => el.textContent = unit);
-            // Optionally, you can add code here to recalculate values based on the new unit
-        }
-    </script>
+  <section class="card" style="margin-top:24px">
+    <div class="card-head">
+      <h2>Reference averages</h2>
+      <span class="muted" id="population-source"></span>
+    </div>
+    <div id="population-table"></div>
+    <p class="muted" style="margin-top:12px">Percentiles assume a normal distribution. Read the <a href="methodology.html">methodology</a> for limitations.</p>
+  </section>
+
+  <div class="ad-slot" data-ad-slot="2155582592"></div>
+</main>
+
+<dialog id="consent-dialog" aria-labelledby="consent-title">
+  <form method="dialog">
+    <h2 id="consent-title">Contribute to the community stats?</h2>
+    <p>You can anonymously add your measurements to the <a href="community.html">PlsSize.Me community dataset</a>. It helps others see a broader picture of normal.</p>
+    <ul>
+      <li>Only the four measurements and a random ID are sent. No name, email or location.</li>
+      <li>Your individual entry is never shown publicly. Only totals and averages are.</li>
+      <li>You can delete it any time from <a href="user-info.html">Your data</a>.</li>
+    </ul>
+    <div class="row" style="margin-top:18px">
+      <button value="yes" class="btn primary">Yes, contribute anonymously</button>
+      <button value="no" class="btn">Keep it on my device</button>
+    </div>
+  </form>
+</dialog>
 </body>
 </html>

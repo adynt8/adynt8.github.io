@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /shared-results.html
+
+Sitemap: https://plssize.me/sitemap.xml

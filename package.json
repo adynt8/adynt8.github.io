@@ -1,0 +1,10 @@
+{
+  "name": "plssize.me",
+  "private": true,
+  "type": "module",
+  "description": "Static site for plssize.me — no build step.",
+  "scripts": {
+    "start": "python3 -m http.server 8080",
+    "test": "node --test tests/*.test.mjs"
+  }
+}
