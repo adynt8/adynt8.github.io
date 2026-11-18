@@ -1,14 +1,11 @@
 // Thin wrapper around the Supabase backend. Everything here is optional:
 // if the backend is unreachable, the site keeps working with local data only.
 //
-// The database only allows the public key to call a handful of validated functions
-// (see supabase/schema.sql). Until that file has been run on a database created by the
-// 2024 site, the functions don't exist yet, so each call falls back to the old
-// direct-table access. The `legacy*` functions can be deleted once schema.sql is live.
+// The database only lets the public key call a handful of validated functions and read one
+// view (see supabase/schema.sql); it has no direct access to the tables.
 import { SUPABASE_URL, SUPABASE_ANON_KEY, SUPABASE_JS } from './config.js';
 import { METRICS, CM_PER_IN, isPlausible } from './stats.js';
 
-const TABLE = 'visitor_data';
 const COMMUNITY_CACHE = 'plssize:community';
 const COMMUNITY_TTL = 10 * 60 * 1000;
 
@@ -25,74 +22,36 @@ async function run(query) {
   return data;
 }
 
-// PostgREST: function / relation not found in the schema cache.
-const isMissing = (err) => ['PGRST202', 'PGRST205', '42883', '42P01'].includes(err?.code);
-
-/** Run `modern`; if the database hasn't been upgraded yet, run `legacy` instead. */
-async function withFallback(modern, legacy) {
-  try { return await modern(); } catch (err) {
-    if (!isMissing(err)) throw err;
-    return legacy();
-  }
-}
-
 const round = (v) => (Number.isFinite(v) ? Math.round(v * 100) / 100 : null);
 const clearCommunityCache = () => { try { sessionStorage.removeItem(COMMUNITY_CACHE); } catch { /* ignore */ } };
 
 /** Insert or update this visitor's anonymous measurements (always sent in cm). */
 export async function uploadMeasurements(visitorId, measurementsCm) {
   const db = await client();
-  const m = Object.fromEntries(METRICS.map((k) => [k, round(measurementsCm[k])]));
-  await withFallback(
-    () => run(db.rpc('submit_measurements', {
-      p_visitor: visitorId,
-      p_erect_length: m.erectLength,
-      p_erect_girth: m.erectGirth,
-      p_flaccid_length: m.flaccidLength,
-      p_flaccid_girth: m.flaccidGirth,
-    })),
-    () => legacyUpload(db, visitorId, m),
-  );
+  await run(db.rpc('submit_measurements', {
+    p_visitor: visitorId,
+    p_erect_length: round(measurementsCm.erectLength),
+    p_erect_girth: round(measurementsCm.erectGirth),
+    p_flaccid_length: round(measurementsCm.flaccidLength),
+    p_flaccid_girth: round(measurementsCm.flaccidGirth),
+  }));
   clearCommunityCache();
-}
-
-async function legacyUpload(db, visitorId, m) {
-  const payload = { visitorId, unit: 'cm', timestamp: new Date().toISOString(), ...m };
-  const existing = await run(db.from(TABLE).select('visitCount').eq('visitorId', visitorId).maybeSingle());
-  if (existing) {
-    await run(db.from(TABLE).update({ ...payload, visitCount: (existing.visitCount || 0) + 1 }).eq('visitorId', visitorId));
-  } else {
-    await run(db.from(TABLE).insert({ ...payload, visitCount: 1 }));
-  }
 }
 
 /** Delete this visitor's row. */
 export async function removeMeasurements(visitorId) {
   const db = await client();
-  await withFallback(
-    () => run(db.rpc('delete_measurements', { p_visitor: visitorId })),
-    async () => {
-      try {
-        await run(db.from(TABLE).delete().eq('visitorId', visitorId));
-      } catch {
-        const blank = Object.fromEntries(METRICS.map((k) => [k, null]));
-        await run(db.from(TABLE).update({ ...blank, unit: null, country: null }).eq('visitorId', visitorId));
-      }
-    },
-  );
+  await run(db.rpc('delete_measurements', { p_visitor: visitorId }));
   clearCommunityCache();
 }
 
 /** This visitor's stored row, or null. */
 export async function fetchMyRow(visitorId) {
   const db = await client();
-  return withFallback(
-    async () => (await run(db.rpc('get_measurements', { p_visitor: visitorId })))?.[0] ?? null,
-    () => run(db.from(TABLE).select('*').eq('visitorId', visitorId).maybeSingle()),
-  );
+  return (await run(db.rpc('get_measurements', { p_visitor: visitorId })))?.[0] ?? null;
 }
 
-/** Normalise a database row (legacy rows may be in inches or contain strings) to cm. */
+/** Normalise a database row to cm (rows imported from the 2024 database may be in inches or hold strings). */
 export function normaliseRow(row) {
   const factor = row.unit === 'in' ? CM_PER_IN : 1;
   const out = { timestamp: row.timestamp };
@@ -125,7 +84,7 @@ export async function fetchCommunity({ fresh = false } = {}) {
     } catch { /* ignore */ }
   }
   const db = await client();
-  const raw = await withFallback(() => fetchAll(db, 'community_measurements'), () => fetchAll(db, TABLE));
+  const raw = await fetchAll(db, 'community_measurements');
   const rows = raw.map(normaliseRow).filter((r) => METRICS.some((m) => r[m] != null));
   try { sessionStorage.setItem(COMMUNITY_CACHE, JSON.stringify({ at: Date.now(), rows })); } catch { /* ignore */ }
   return rows;

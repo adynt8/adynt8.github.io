@@ -18,9 +18,8 @@ const server = http.createServer((req, res) => {
   res.writeHead(200, { 'content-type': TYPES[path.extname(full)] || 'application/octet-stream' }).end(fs.readFileSync(full));
 });
 
-// Stand-in for @supabase/supabase-js. `MODE` is "modern" (schema.sql applied) or "legacy" (2024 database).
-const stub = (mode) => `
-const MODE = ${JSON.stringify(mode)};
+// Stand-in for @supabase/supabase-js with a small in-memory backend.
+const stub = () => `
 const rows = Array.from({ length: 60 }, (_, i) => ({ unit: i % 3 ? 'cm' : 'in', erectLength: i % 3 ? 11 + (i % 9) : 4.5 + (i % 5) / 2,
   erectGirth: i % 3 ? 10 + (i % 5) : 4 + (i % 4) / 2, flaccidLength: null, flaccidGirth: null,
   timestamp: new Date(Date.now() - i * 86400000 / 4).toISOString() }));
@@ -28,7 +27,6 @@ const votes = () => JSON.parse(localStorage.getItem('stub:votes') || '{}');
 const calls = () => JSON.parse(localStorage.getItem('stub:calls') || '[]');
 const log = (c) => localStorage.setItem('stub:calls', JSON.stringify([...calls(), c]));
 const ok = (data) => Promise.resolve({ data, error: null });
-const missing = () => Promise.resolve({ data: null, error: { code: 'PGRST202', message: 'not found' } });
 function pollRows(id) { const v = votes()[id] || {}; const counts = {}; Object.values(v).forEach((c) => { counts[c] = (counts[c] || 0) + 1; });
   return Object.entries(counts).map(([choice, n]) => ({ choice: Number(choice), votes: n })); }
 function builder(rel) {
@@ -37,7 +35,6 @@ function builder(rel) {
     insert: (v) => { q.op = 'insert'; q.v = v; return b; }, update: (v) => { q.op = 'update'; q.v = v; return b; }, delete: () => { q.op = 'delete'; return b; },
     then: (res, rej) => {
       log('table:' + rel + ':' + q.op);
-      if (rel === 'community_measurements' && MODE === 'legacy') return Promise.resolve({ data: null, error: { code: 'PGRST205' } }).then(res, rej);
       if (q.op === 'select' && 'from' in q) return ok(q.from === 0 ? rows : []).then(res, rej);
       if (q.op === 'select') return ok(null).then(res, rej);
       return ok(null).then(res, rej);
@@ -49,7 +46,6 @@ export function createClient() {
     from: builder,
     rpc(name, args) {
       log('rpc:' + name);
-      if (MODE === 'legacy') return missing();
       if (name === 'poll_results') return ok(pollRows(args.p_poll));
       if (name === 'cast_vote') { const v = votes(); (v[args.p_poll] ||= {})[args.p_voter] = args.p_choice; localStorage.setItem('stub:votes', JSON.stringify(v)); return ok(pollRows(args.p_poll)); }
       if (name === 'get_measurements') return ok([]);
@@ -58,10 +54,10 @@ export function createClient() {
   };
 }`;
 
-async function newContext(browser, mode, options = {}) {
+async function newContext(browser, options = {}) {
   const ctx = await browser.newContext({ viewport: { width: 1200, height: 900 }, serviceWorkers: 'block', ...options });
   await ctx.route(/^https?:\/\/(?!localhost)/, (route) => (route.request().url().includes('supabase-js')
-    ? route.fulfill({ contentType: 'text/javascript', body: stub(mode) })
+    ? route.fulfill({ contentType: 'text/javascript', body: stub() })
     : route.abort()));
   return ctx;
 }
@@ -79,7 +75,7 @@ const calls = (page) => page.evaluate(() => JSON.parse(localStorage.getItem('stu
   };
 
   // ---- 1. First visit, upgraded database ----
-  let ctx = await newContext(browser, 'modern');
+  let ctx = await newContext(browser);
   let page = await ctx.newPage(); watch(page);
   await page.goto(base);
   assert.equal(await page.locator('#welcome').isVisible(), false, 'no welcome panel on a first visit');
@@ -108,7 +104,7 @@ const calls = (page) => page.evaluate(() => JSON.parse(localStorage.getItem('stu
   assert.equal(await page.inputValue('#erectLength'), '5.98');
   await page.locator('input[name=unit][value=cm]').check();
 
-  // Consent → upload goes through the validated function, not the table.
+  // Consent → upload goes through the validated function, never the table.
   await page.click('#calc-form button[type=submit]');
   await page.click('#consent-dialog button[value=yes]');
   await page.waitForFunction(() => (localStorage.getItem('stub:calls') || '').includes('rpc:submit_measurements'), null, { timeout: 5000 });
@@ -173,19 +169,7 @@ const calls = (page) => page.evaluate(() => JSON.parse(localStorage.getItem('stu
   assert.doesNotMatch(welcome, /This week's question/, 'already voted, so no poll nudge');
   await ctx.close();
 
-  // ---- 4. Database not upgraded yet: falls back to the 2024 table, poll stays hidden ----
-  ctx = await newContext(browser, 'legacy');
-  page = await ctx.newPage(); watch(page);
-  await page.goto(base);
-  await page.evaluate(() => { const s = JSON.parse(localStorage.getItem('plssize:v2')); s.sharing = true; s.unit = 'cm'; localStorage.setItem('plssize:v2', JSON.stringify(s)); });
-  await page.reload();
-  await page.fill('#erectLength', '14'); await page.locator('#erectLength').blur();
-  await page.waitForFunction(() => (localStorage.getItem('stub:calls') || '').includes('table:visitor_data:insert'), null, { timeout: 5000 });
-  await page.waitForFunction(() => !document.querySelector('#population option[value=community]').disabled);
-  assert.equal(await page.locator('#poll').isVisible(), false);
-  await ctx.close();
-
-  // ---- 5. Backend unreachable + phone-sized dark mode: still works, nothing overflows ----
+  // ---- 4. Backend unreachable + phone-sized dark mode: still works, nothing overflows ----
   ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, colorScheme: 'dark', serviceWorkers: 'block' });
   await ctx.route(/^https?:\/\/(?!localhost)/, (route) => route.abort());
   page = await ctx.newPage(); watch(page);
@@ -198,7 +182,7 @@ const calls = (page) => page.evaluate(() => JSON.parse(localStorage.getItem('stu
   assert.match(await page.evaluate(() => getComputedStyle(document.body).backgroundColor), /rgb\(13, 19, 28\)/, 'dark theme applied');
   await ctx.close();
 
-  // ---- 6. Service worker installs and serves the homepage offline ----
+  // ---- 5. Service worker installs and serves the homepage offline ----
   ctx = await browser.newContext();
   await ctx.route(/^https?:\/\/(?!localhost)/, (route) => route.abort());
   page = await ctx.newPage();

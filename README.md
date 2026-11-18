@@ -53,14 +53,16 @@ ES modules need an HTTP server, so opening the files directly with `file://` won
 
 Community stats, sharing, the weekly poll and the survey use Supabase (`js/config.js`).
 
-**Run `supabase/schema.sql` once in the Supabase SQL editor** (back up `visitor_data` first; the script never modifies rows). It:
+`supabase/schema.sql` defines everything (run it in the Supabase SQL editor; it never modifies existing rows). It:
 
 - removes all direct access to the tables for the public key;
 - adds validated functions for saving, reading and deleting a visitor's own entry (`submit_measurements`, `get_measurements`, `delete_measurements`);
 - adds a `community_measurements` view that exposes measurements only, with no visitor IDs;
 - creates the poll tables/functions (`cast_vote`, `poll_results`) and the insert-only `survey_responses` table.
 
-Until it has been run, the site falls back to the 2024 behaviour (direct table access), the poll stays hidden and the survey can't save. If Supabase is unreachable, those features hide or show a friendly message and everything else keeps working.
+The live project already has it applied; re-run it after editing the file (it's safe to run repeatedly). If Supabase is unreachable, those features hide or show a friendly message and everything else keeps working.
+
+To bring over entries from the 2024 project, export its `visitor_data` table as CSV and import it into this project's `visitor_data` table. Inch-based rows are converted when read.
 
 To add poll questions, append to `POLLS` in `js/polls.js`. One question is shown per week, in order, repeating.
 
