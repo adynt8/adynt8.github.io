@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /shared-results.html
 
-Sitemap: https://plssize.me/sitemap.xml
+Sitemap: https://adynt8.github.io/sitemap.xml

@@ -128,6 +128,13 @@ function initAds() {
   }
 }
 
+// Offline support: sw.js keeps a copy of pages you've opened (network first, cache as fallback).
+function registerServiceWorker() {
+  if (!('serviceWorker' in navigator) || !window.isSecureContext) return;
+  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => { /* optional */ }));
+}
+
 renderHeader();
 renderFooter();
 initAds();
+registerServiceWorker();

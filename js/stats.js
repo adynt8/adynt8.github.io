@@ -36,6 +36,11 @@ export const SOURCES = {
     cite: 'Prause N, Park J, Leung S, Miller G. Women’s preferences for penis size: a new research method using selection among 3D models. PLOS ONE. 2015;10(9):e0133079.',
     url: 'https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0133079',
   },
+  yafi2018: {
+    short: 'Yafi et al., 2018',
+    cite: 'Yafi FA, et al. Grower or shower? Predictors of change in penile length from the flaccid to the erect state. International Journal of Impotence Research. 2018;30(6).',
+    url: 'https://pubmed.ncbi.nlm.nih.gov/30068977/',
+  },
   belladelli2023: {
     short: 'Belladelli et al., 2023',
     cite: 'Belladelli F, Del Giudice F, Glover F, et al. Worldwide temporal trends in penile length: a systematic review and meta-analysis. World Journal of Men’s Health. 2023;41(4):848–860.',
@@ -116,6 +121,32 @@ export function percentileSentence(p) {
   if (n <= 0) return 'smaller than nearly everyone';
   if (n >= 100) return 'larger than nearly everyone';
   return `larger than about ${n} in 100`;
+}
+
+// Home measurements are only repeatable to about half a centimetre.
+export const MEASUREMENT_ERROR_CM = 0.5;
+
+/** Percentile band [low, high] allowing for measurement error. */
+export function percentileRange(value, dist, errorCm = MEASUREMENT_ERROR_CM) {
+  return [percentile(value - errorCm, dist), percentile(value + errorCm, dist)];
+}
+
+// Yafi et al. 2018 classed men whose length increased by 4 cm or more from flaccid to erect as "growers".
+export const GROWER_THRESHOLD_CM = 4;
+
+/** Flaccid-to-erect change: { gainCm, ratio, type: 'grower' | 'shower' }. */
+export function growth(flaccidLengthCm, erectLengthCm) {
+  const gainCm = erectLengthCm - flaccidLengthCm;
+  return { gainCm, ratio: erectLengthCm / flaccidLengthCm, type: gainCm >= GROWER_THRESHOLD_CM ? 'grower' : 'shower' };
+}
+
+/** Percentile (0–100) of `value` within a list of observed values (share strictly below, half of ties). */
+export function empiricalPercentile(value, values) {
+  const v = values.filter(Number.isFinite);
+  if (!v.length) return null;
+  const below = v.filter((x) => x < value).length;
+  const equal = v.filter((x) => x === value).length;
+  return ((below + equal / 2) / v.length) * 100;
 }
 
 export const toUnit = (cm, unit) => (unit === 'in' ? cm / CM_PER_IN : cm);

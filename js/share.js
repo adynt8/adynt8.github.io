@@ -1,6 +1,5 @@
 // Shareable links encode measurements directly in the URL — no account or database needed.
 import { METRICS, fromUnit } from './stats.js';
-import { toast } from './layout.js';
 
 /** Query string for a set of measurements (cm), encoded as whole millimetres joined by dots. */
 export function encodeShare(measurements, unit) {
@@ -52,6 +51,7 @@ export async function shareLink(url, title = 'My PlsSize.Me results') {
   }
   try {
     await navigator.clipboard.writeText(url);
+    const { toast } = await import('./layout.js');
     toast('Link copied to clipboard');
   } catch {
     prompt('Copy this link:', url);

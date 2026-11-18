@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>PlsSize.Me — Penis Size Calculator &amp; Percentiles</title>
   <meta name="description" content="Find out how your size compares. Free, private penis size calculator with percentiles from peer-reviewed studies, condom sizing, visual comparisons and progress tracking.">
-  <link rel="canonical" href="https://plssize.me/">
+  <link rel="canonical" href="https://adynt8.github.io/">
   <meta property="og:type" content="website">
   <meta property="og:title" content="PlsSize.Me — Penis Size Calculator">
   <meta property="og:description" content="Private size calculator with percentiles from peer-reviewed research.">
-  <meta property="og:url" content="https://plssize.me/">
-  <meta property="og:image" content="https://plssize.me/android-chrome-512x512.png">
+  <meta property="og:url" content="https://adynt8.github.io/">
+  <meta property="og:image" content="https://adynt8.github.io/android-chrome-512x512.png">
   <meta name="theme-color" content="#2f80ed">
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="apple-touch-icon" href="android-chrome-192x192.png">
@@ -23,10 +23,13 @@
 </head>
 <body>
 <main>
+  <noscript><p class="notice warn">This site needs JavaScript to calculate and draw results. Everything runs on your device.</p></noscript>
   <section class="hero">
     <h1>How do you measure up?</h1>
     <p>Enter your measurements to see percentiles from peer-reviewed research. Everything is calculated on your device.</p>
   </section>
+
+  <section id="welcome" class="card welcome hidden" aria-label="Welcome back"></section>
 
   <div class="ad-slot" data-ad-slot="7834450535"></div>
 
@@ -77,7 +80,7 @@
     </div>
   </form>
 
-  <section id="results" class="hidden" aria-live="polite">
+  <section id="results" class="hidden">
     <div class="card-head">
       <h2>Your results</h2>
       <div class="row no-print">
@@ -89,6 +92,8 @@
     <div id="results-body"></div>
     <p id="sharing-status" class="muted" style="margin-top:16px"></p>
   </section>
+
+  <section id="poll" class="card poll hidden" style="margin-top:24px" aria-label="Question of the week"></section>
 
   <section class="card" style="margin-top:24px">
     <div class="card-head">

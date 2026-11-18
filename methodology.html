@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Methodology &amp; Sources — PlsSize.Me</title>
   <meta name="description" content="Where PlsSize.Me's numbers come from, how percentiles and condom sizes are calculated, and the limits of the data.">
-  <link rel="canonical" href="https://plssize.me/methodology.html">
+  <link rel="canonical" href="https://adynt8.github.io/methodology.html">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Methodology &amp; Sources — PlsSize.Me">
   <meta property="og:description" content="Where PlsSize.Me's numbers come from, how percentiles and condom sizes are calculated, and the limits of the data.">
-  <meta property="og:image" content="https://plssize.me/android-chrome-512x512.png">
+  <meta property="og:image" content="https://adynt8.github.io/android-chrome-512x512.png">
   <meta name="theme-color" content="#2f80ed">
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="apple-touch-icon" href="android-chrome-192x192.png">
@@ -22,6 +22,7 @@
 </head>
 <body>
 <main>
+  <noscript><p class="notice warn">This site needs JavaScript to calculate and draw results. Everything runs on your device.</p></noscript>
   <section class="hero">
     <h1>Methodology &amp; sources</h1>
     <p>Where the numbers come from, how they're calculated, and what they can't tell you.</p>
@@ -42,11 +43,13 @@
     <p style="margin-top:1em"><strong>United States — self measured.</strong> Herbenick et al. (2014) asked 1,661 men to measure themselves at home to order custom-fit condoms: mean erect length 14.15 cm (SD 2.66), mean erect girth 12.23 cm (SD 2.23). Self-measurement and the wider spread make this a more forgiving comparison.</p>
     <p><strong>PlsSize.Me community.</strong> Visitors can anonymously share their measurements. Once at least 30 plausible entries exist for a measurement, you can compare against them. These are self-reported and self-selected, so they almost certainly skew large.</p>
     <p><strong>Partner preference.</strong> Prause et al. (2015) asked 75 women to choose among 3D-printed models. The average preferred size for a long-term partner was 16.0 cm long and 12.2 cm around; for a one-time partner, 16.3 cm and 12.7 cm. It's a small study of one population — treat it as a curiosity.</p>
+    <p><strong>Grower or shower.</strong> Yafi et al. (2018) measured 274 men before and at peak erection. The median gain was 4.0 cm, which they used as the dividing line: a gain of 4 cm or more is a "grower". The men were being assessed for erectile problems, so the split may differ in the general population.</p>
     <p><strong>A note on trends.</strong> A 2023 meta-analysis (Belladelli et al.) found that reported erect length increased over the past three decades, to a pooled mean of 13.93 cm. Averages are snapshots, not fixed facts.</p>
 
     <h2 id="formulas">Formulas</h2>
     <p><strong>Percentile.</strong> We assume each measurement is normally distributed and compute the z-score <code>z = (x − mean) / SD</code>, then the cumulative probability <code>Φ(z) = ½·(1 + erf(z/√2))</code>. Real size distributions have heavier tails than a normal curve, so percentiles beyond about the 2nd or 98th are rough.</p>
     <p><strong>Condom nominal width.</strong> <code>nominal width (mm) ≈ 0.45 × girth (mm)</code>. A flat condom's width is half its circumference; condoms are designed about 10% smaller than the penis so they stay put, which gives 0.5 × 0.9 = 0.45.</p>
+    <p><strong>Measuring error.</strong> Repeat measurements at home typically differ by around half a centimetre, so each result also shows the percentile band for your value ± 0.5 cm. Small changes inside that band don't mean anything.</p>
     <p><strong>Volume.</strong> Treating the shaft as a cylinder: <code>V = girth² × length / 4π</code>. Real shapes taper, so this overestimates slightly.</p>
     <p><strong>Surface area.</strong> Lateral area of the same cylinder: <code>A = girth × length</code>.</p>
     <p><strong>Photo measurement.</strong> A standard bank card's long edge is 85.6 mm. Dividing that by the length of the line you draw along it gives millimetres per pixel, which scales the second line. Perspective and lens distortion add error if the camera isn't square to the subject.</p>
@@ -63,6 +66,7 @@
       <li>Veale D, Miles S, Bramley S, Muir G, Hodsoll J. Am I normal? A systematic review and construction of nomograms for flaccid and erect penis length and circumference in up to 15,521 men. <em>BJU International</em>. 2015;115(6):978–986. <a href="https://pubmed.ncbi.nlm.nih.gov/25487360/" target="_blank" rel="noopener">PubMed</a></li>
       <li>Herbenick D, Reece M, Schick V, Sanders SA. Erect penile length and circumference dimensions of 1,661 sexually active men in the United States. <em>Journal of Sexual Medicine</em>. 2014;11(1):93–101. <a href="https://pubmed.ncbi.nlm.nih.gov/23841855/" target="_blank" rel="noopener">PubMed</a></li>
       <li>Prause N, Park J, Leung S, Miller G. Women's preferences for penis size: a new research method using selection among 3D models. <em>PLOS ONE</em>. 2015;10(9):e0133079. <a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0133079" target="_blank" rel="noopener">Full text</a></li>
+      <li>Yafi FA, et al. Grower or shower? Predictors of change in penile length from the flaccid to the erect state. <em>International Journal of Impotence Research</em>. 2018;30(6). <a href="https://pubmed.ncbi.nlm.nih.gov/30068977/" target="_blank" rel="noopener">PubMed</a></li>
       <li>Belladelli F, Del Giudice F, Glover F, et al. Worldwide temporal trends in penile length: a systematic review and meta-analysis. <em>World Journal of Men's Health</em>. 2023;41(4):848–860. <a href="https://pubmed.ncbi.nlm.nih.gov/36792094/" target="_blank" rel="noopener">PubMed</a></li>
     </ol>
   </article>

@@ -75,10 +75,11 @@ export function bellCurve({ dist, value, unit, title }) {
 /** Histogram of values (cm) with optional highlighted bin for `you`. */
 export function histogram({ values, unit, you, title, binCm }) {
   if (!values.length) return '<p class="empty">No data yet.</p>';
-  const min = Math.floor(Math.min(...values));
-  const max = Math.ceil(Math.max(...values));
+  // Bin edges fall on whole centimetres or half inches so the axis labels line up with the bars.
   const bin = binCm ?? (unit === 'in' ? 1.27 : 1);
-  const bins = Math.max(1, Math.ceil((max - min) / bin));
+  const min = Math.floor(Math.min(...values) / bin) * bin;
+  const max = Math.ceil(Math.max(...values) / bin) * bin;
+  const bins = Math.max(1, Math.round((max - min) / bin));
   const counts = new Array(bins).fill(0);
   for (const v of values) counts[Math.min(bins - 1, Math.floor((v - min) / bin))]++;
   const top = Math.max(...counts);
