@@ -1,6 +1,6 @@
 // Renders the results grid. Shared by the calculator and the shared-results page.
 import {
-  METRICS, METRIC_LABELS, PREFERENCE, SOURCES, percentile, describePercentile, formatPercentile, percentileSentence,
+  METRICS, METRIC_LABELS, PREFERENCE, SOURCES, percentile, percentileRange, growth, describePercentile, formatPercentile, percentileSentence,
   fmt, toUnit, nominalWidthMm, cylinderVolumeMl, shaftSurfaceCm2,
 } from './stats.js';
 import { closestBy, condomTier } from './data.js';
@@ -24,7 +24,14 @@ function metricCard(metric, valueCm, dist, unit) {
     <div class="pbar-legend"><span>Smaller</span><span>Average</span><span>Larger</span></div>
     <p><strong>${esc(formatPercentile(p))} percentile</strong> — ${percentileSentence(p)}.</p>
     <p>${fmt(Math.abs(diff), unit)} ${diff >= 0 ? 'above' : 'below'} the average of ${fmt(dist.mean, unit)}.</p>
+    <p class="range">${rangeText(valueCm, dist)}</p>
   </div>`;
+}
+
+// Home measurements wobble by about ±0.5 cm, so show the band the true percentile probably sits in.
+function rangeText(valueCm, dist) {
+  const [lo, hi] = percentileRange(valueCm, dist).map(formatPercentile);
+  return lo === hi ? '' : `Allowing for measuring error: ${esc(lo)}–${esc(hi)}.`;
 }
 
 function extrasCards(m, unit) {
@@ -63,6 +70,13 @@ function extrasCards(m, unit) {
     cards.push(`<div class="result"><h3>Partner preference</h3>
       <p style="margin-top:6px">${lines.join('<br>')}</p>
       <p>Average size women chose for a long-term partner in a 3D-model study (<a href="${SOURCES.prause2015.url}" target="_blank" rel="noopener">${SOURCES.prause2015.short}</a>). Preferences vary widely.</p></div>`);
+  }
+
+  if (Number.isFinite(L) && Number.isFinite(m.flaccidLength) && L > m.flaccidLength) {
+    const g = growth(m.flaccidLength, L);
+    cards.push(`<div class="result"><h3>Grower or shower?</h3>
+      <div class="big">${g.type === 'grower' ? 'Grower' : 'Shower'}</div>
+      <p>You gain ${fmt(g.gainCm, unit)} (${((g.ratio - 1) * 100).toFixed(0)}%) from flaccid to erect. One study drew the line at ${fmt(4, unit)} (<a href="${SOURCES.yafi2018.url}" target="_blank" rel="noopener">${SOURCES.yafi2018.short}</a>). Flaccid size varies a lot with temperature, so take this lightly.</p></div>`);
   }
 
   if (Number.isFinite(L)) {

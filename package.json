@@ -2,9 +2,10 @@
   "name": "plssize.me",
   "private": true,
   "type": "module",
-  "description": "Static site for plssize.me — no build step.",
+  "description": "Static site for plssize.me \u2014 no build step.",
   "scripts": {
     "start": "python3 -m http.server 8080",
-    "test": "node --test tests/*.test.mjs"
+    "test": "node --test tests/*.test.mjs",
+    "test:e2e": "node tests/e2e.cjs"
   }
 }

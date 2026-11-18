@@ -5,6 +5,7 @@ import { fillPopulationSelect, getPopulation } from '../populations.js';
 import { renderResults, renderPopulationTable } from '../results.js';
 import { uploadMeasurements } from '../api.js';
 import { shareUrl, shareLink, encodeShare } from '../share.js';
+import '../home.js';
 
 const form = $('#calc-form');
 const inputs = Object.fromEntries(METRICS.map((m) => [m, $(`#${m}`)]));
@@ -105,14 +106,14 @@ function maybeHorse() {
 form.addEventListener('input', (e) => {
   if (e.target.name === 'unit' || e.target === populationSelect) return;
   const measurements = readInputs();
-  validate(measurements);
+  if (!$('#input-warning').classList.contains('hidden')) validate(measurements); // clear a warning as soon as it's fixed
   state = store.update({ measurements });
   render();
 });
 
-// Commit (Enter / blur) — upload if sharing, easter egg.
+// Commit (Enter / blur) — check the value, upload if sharing, easter egg.
 form.addEventListener('change', (e) => {
-  if (METRICS.includes(e.target.name)) { scheduleUpload(); maybeHorse(); }
+  if (METRICS.includes(e.target.name)) { validate(readInputs()); scheduleUpload(); maybeHorse(); }
 });
 
 form.addEventListener('submit', (e) => {

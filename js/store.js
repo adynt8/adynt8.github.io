@@ -16,6 +16,8 @@ const defaults = () => ({
   history: [],
   sharing: null, // null = never asked, true/false = user's choice
   visitorId: null,
+  votes: {}, // poll id → chosen option index
+  visits: { last: null, previous: null, count: 0 },
 });
 
 function safeGet(key) {
@@ -59,6 +61,11 @@ function migrateLegacy() {
 
 let cache;
 
+// Another tab changed the data: drop our copy so the next load() re-reads it.
+if (typeof window !== 'undefined') {
+  window.addEventListener('storage', (e) => { if (e.key === KEY || e.key === null) cache = undefined; });
+}
+
 export function load() {
   if (cache) return cache;
   const raw = safeGet(KEY);
@@ -88,6 +95,22 @@ export function visitorId() {
     save(state);
   }
   return state.visitorId;
+}
+
+/**
+ * Count this browser session as a visit (once) and return { last, previous, count }.
+ * `previous` is when the visitor was last here before today's session, or null on a first visit.
+ */
+export function recordVisit(now = new Date()) {
+  const state = load();
+  let counted = false;
+  try { counted = sessionStorage.getItem('plssize:visit') === '1'; } catch { /* ignore */ }
+  if (!counted) {
+    state.visits = { previous: state.visits?.last ?? null, last: now.toISOString(), count: (state.visits?.count ?? 0) + 1 };
+    save(state);
+    try { sessionStorage.setItem('plssize:visit', '1'); } catch { /* ignore */ }
+  }
+  return state.visits;
 }
 
 export function hasMeasurements(m = load().measurements) {

@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Progress Tracker — PlsSize.Me</title>
   <meta name="description" content="Log your measurements over time and see the trend. Stored only on your device.">
-  <link rel="canonical" href="https://plssize.me/progress.html">
+  <link rel="canonical" href="https://adynt8.github.io/progress.html">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Progress Tracker — PlsSize.Me">
   <meta property="og:description" content="Log your measurements over time and see the trend. Stored only on your device.">
-  <meta property="og:image" content="https://plssize.me/android-chrome-512x512.png">
+  <meta property="og:image" content="https://adynt8.github.io/android-chrome-512x512.png">
   <meta name="theme-color" content="#2f80ed">
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="apple-touch-icon" href="android-chrome-192x192.png">
@@ -22,6 +22,7 @@
 </head>
 <body>
 <main>
+  <noscript><p class="notice warn">This site needs JavaScript to calculate and draw results. Everything runs on your device.</p></noscript>
   <section class="hero">
     <h1>Progress tracker</h1>
     <p>Log measurements over time. Your log stays on this device; export it any time.</p>
@@ -47,6 +48,15 @@
       <span class="muted">Tip: measure at the same time of day, the same way, and average three readings.</span>
     </div>
   </form>
+
+  <section class="card">
+    <div class="card-head">
+      <h2>Your habit</h2>
+      <button type="button" id="reminder-btn" class="btn">Add a monthly reminder to my calendar</button>
+    </div>
+    <div id="habit" class="grid grid-4"></div>
+    <p class="muted" style="margin-top:12px">The reminder is a calendar file with the discreet title “Monthly check-in”. Nothing is sent to us.</p>
+  </section>
 
   <section class="card">
     <div class="card-head">

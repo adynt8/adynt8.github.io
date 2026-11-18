@@ -2,6 +2,8 @@ import { $, $$, esc, toast } from '../layout.js';
 import { METRICS, METRIC_LABELS, toUnit, fromUnit } from '../stats.js';
 import * as store from '../store.js';
 import { lineChart } from '../charts.js';
+import { monthStreak, daysSinceLastEntry, changeOver, reminderIcs } from '../progress-stats.js';
+import { MEASUREMENT_ERROR_CM } from '../stats.js';
 
 let state = store.load();
 const COLORS = { erectLength: 'var(--you)', erectGirth: 'var(--other)', flaccidLength: '#8b5cf6', flaccidGirth: '#14b8a6' };
@@ -15,7 +17,29 @@ function prefill() {
   $$('input[name="unit"]').forEach((r) => { r.checked = r.value === state.unit; });
 }
 
+function download(filename, text, type) {
+  const a = Object.assign(document.createElement('a'), { href: URL.createObjectURL(new Blob([text], { type })), download: filename });
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+function renderHabit() {
+  const { history, unit } = state;
+  const streak = monthStreak(history);
+  const last = daysSinceLastEntry(history);
+  const change = changeOver(history, 'erectLength', 90);
+  const changeText = change == null ? '—' : `${change >= 0 ? '+' : '−'}${toUnit(Math.abs(change), unit).toFixed(unit === 'in' ? 2 : 1)} ${unit}`;
+  const changeNote = change == null ? 'Erect length, last 90 days vs before'
+    : Math.abs(change) <= MEASUREMENT_ERROR_CM ? 'Erect length, 90 days · within measuring error' : 'Erect length, last 90 days vs before';
+  $('#habit').innerHTML = `
+    <div class="kpi"><b>${history.length}</b><span>${history.length === 1 ? 'Entry' : 'Entries'} logged</span></div>
+    <div class="kpi"><b>${streak}</b><span>Month streak</span></div>
+    <div class="kpi"><b>${last == null ? '—' : last === 0 ? 'Today' : `${last}d`}</b><span>Since last entry</span></div>
+    <div class="kpi"><b>${changeText}</b><span>${changeNote}</span></div>`;
+}
+
 function render() {
+  renderHabit();
   const { history, unit } = state;
   const series = METRICS.map((m) => ({
     metric: m,
@@ -73,10 +97,12 @@ $$('input[name="unit"]').forEach((r) => r.addEventListener('change', () => {
 $('#export-csv').addEventListener('click', () => {
   const header = ['date', ...METRICS.map((m) => `${m}_cm`), 'note'];
   const lines = state.history.map((e) => [e.date, ...METRICS.map((m) => (Number.isFinite(e[m]) ? e[m].toFixed(2) : '')), JSON.stringify(e.note || '')].join(','));
-  const blob = new Blob([[header.join(','), ...lines].join('\n')], { type: 'text/csv' });
-  const a = Object.assign(document.createElement('a'), { href: URL.createObjectURL(blob), download: 'plssize-progress.csv' });
-  a.click();
-  URL.revokeObjectURL(a.href);
+  download('plssize-progress.csv', [header.join(','), ...lines].join('\n'), 'text/csv');
+});
+
+$('#reminder-btn').addEventListener('click', () => {
+  download('monthly-check-in.ics', reminderIcs(new URL('progress.html', location.href).href), 'text/calendar');
+  toast('Open the downloaded file to add it to your calendar');
 });
 
 $('#import-file').addEventListener('change', async (e) => {

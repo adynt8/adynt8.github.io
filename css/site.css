@@ -1,23 +1,25 @@
 /* PlsSize.Me — site styles. No framework, no build step. */
 
 :root {
-  color-scheme: light;
-  --bg: #f5f7fb;
-  --surface: #ffffff;
-  --surface-2: #eef2f8;
-  --border: #dbe2ec;
-  --text: #142033;
-  --muted: #5b6b82;
-  --accent: #2f80ed;
-  --accent-strong: #1c64c9;
-  --accent-soft: #e3eefd;
-  --on-accent: #ffffff;
+  /* Follows the system theme; the header toggle forces one via data-theme. */
+  color-scheme: light dark;
+  --bg: light-dark(#f5f7fb, #0d131c);
+  --surface: light-dark(#ffffff, #151d29);
+  --surface-2: light-dark(#eef2f8, #1c2635);
+  --border: light-dark(#dbe2ec, #2a3646);
+  --text: light-dark(#142033, #e7edf6);
+  --muted: light-dark(#5b6b82, #97a6bb);
+  --accent: light-dark(#2f80ed, #5aa5f7);
+  --accent-strong: light-dark(#1c64c9, #84bcfa);
+  --accent-soft: light-dark(#e3eefd, #1b2d45);
+  --on-accent: light-dark(#ffffff, #08111c);
   --good: #1f9d63;
   --warn: #c98a12;
   --bad: #d64545;
-  --you: #2f80ed;
-  --other: #e0712c;
-  --shadow: 0 1px 2px rgb(16 24 40 / 6%), 0 4px 16px rgb(16 24 40 / 6%);
+  --you: light-dark(#2f80ed, #5aa5f7);
+  --other: light-dark(#e0712c, #f0955a);
+  --shadow-color: light-dark(rgb(16 24 40 / 7%), rgb(0 0 0 / 28%));
+  --shadow: 0 1px 2px var(--shadow-color), 0 4px 16px var(--shadow-color);
   --radius: 14px;
   --radius-sm: 9px;
   --max: 980px;
@@ -25,41 +27,8 @@
   --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    color-scheme: dark;
-    --bg: #0d131c;
-    --surface: #151d29;
-    --surface-2: #1c2635;
-    --border: #2a3646;
-    --text: #e7edf6;
-    --muted: #97a6bb;
-    --accent: #5aa5f7;
-    --accent-strong: #84bcfa;
-    --accent-soft: #1b2d45;
-    --on-accent: #08111c;
-    --you: #5aa5f7;
-    --other: #f0955a;
-    --shadow: 0 1px 2px rgb(0 0 0 / 30%), 0 6px 20px rgb(0 0 0 / 25%);
-  }
-}
-
-:root[data-theme="dark"] {
-  color-scheme: dark;
-  --bg: #0d131c;
-  --surface: #151d29;
-  --surface-2: #1c2635;
-  --border: #2a3646;
-  --text: #e7edf6;
-  --muted: #97a6bb;
-  --accent: #5aa5f7;
-  --accent-strong: #84bcfa;
-  --accent-soft: #1b2d45;
-  --on-accent: #08111c;
-  --you: #5aa5f7;
-  --other: #f0955a;
-  --shadow: 0 1px 2px rgb(0 0 0 / 30%), 0 6px 20px rgb(0 0 0 / 25%);
-}
+:root[data-theme="light"] { color-scheme: light; }
+:root[data-theme="dark"] { color-scheme: dark; }
 
 *, *::before, *::after { box-sizing: border-box; }
 
@@ -100,6 +69,10 @@ code { font-family: var(--mono); font-size: .9em; background: var(--surface-2); 
 }
 
 /* ---------- Header ---------- */
+/* The header is rendered by js/layout.js; hold its space so the page doesn't jump when it appears. */
+body::before { content: ""; display: block; height: 57px; flex: none; }
+body:has(> .site-header)::before { display: none; }
+.site-header { min-height: 57px; }
 .site-header {
   position: sticky; top: 0; z-index: 50;
   background: color-mix(in srgb, var(--surface) 88%, transparent);
@@ -307,3 +280,25 @@ dialog h2 { margin-top: 0; }
   .site-header, .site-footer, .ad-slot, .no-print { display: none !important; }
   .card { box-shadow: none; }
 }
+
+/* ---------- Welcome back & poll ---------- */
+.welcome { border-left: 4px solid var(--accent); }
+.welcome h2 { margin-bottom: 2px; }
+.welcome ul { margin: 10px 0 0; }
+.poll h2 { margin: 10px 0 14px; }
+.poll-options { display: grid; gap: 8px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); }
+.poll-options .btn { justify-content: flex-start; text-align: left; }
+.poll-results { display: grid; gap: 8px; }
+.poll-row {
+  position: relative; display: flex; justify-content: space-between; gap: 12px; align-items: center;
+  padding: 9px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden;
+}
+.poll-row > span, .poll-row > b { position: relative; }
+.poll-row small { color: var(--muted); font-weight: 400; }
+.poll-row.mine { border-color: var(--accent); }
+.poll-bar { position: absolute; inset: 0 auto 0 0; background: var(--accent-soft); transition: width .5s ease; }
+.poll-foot { margin: 10px 0 0; font-size: .88rem; }
+#poll-last { margin-top: 8px; font-size: .88rem; }
+#poll-last:empty { display: none; }
+.result p.range { font-size: .85rem; }
+.result p.range:empty { display: none; }
